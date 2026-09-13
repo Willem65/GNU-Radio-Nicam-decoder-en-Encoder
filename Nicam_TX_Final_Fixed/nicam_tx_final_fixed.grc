@@ -1,0 +1,661 @@
+options:
+  parameters:
+    author: ''
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: 'Minimale NICAM 728 TX: alleen wat strikt nodig is om de fysieke
+      decoder te laten locken. Geen GUI-extras, config-manager, preset-knoppen of
+      freq-sliders - dat is allemaal weggelaten om te testen of die iets met de instabiliteit
+      te maken hebben.'
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: nicam_tx_minimal
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: NICAM 728 TX - MINIMAAL + IQ-invert-knop
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: freq_label
+  id: variable_qtgui_label
+  parameters:
+    comment: ''
+    formatter: 'lambda x: f''<span style="font-size:24pt; font-weight:bold; color:#0a7a0a;">{x:,}
+      Hz</span>'''
+    gui_hint: 3,1,1,1
+    label: '"IQ "'
+    type: int
+    value: iq_state_probe
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1720, 920.0]
+    rotation: 0
+    state: enabled
+- name: freq_trim
+  id: variable
+  parameters:
+    comment: Fijnafstemming in Hz, los van tx_freq. Zet hier bv. -7500, -5000, 0,
+      +5000, +7500 om te testen of de lock stabieler wordt bij een iets andere frequentie
+      (compenseert mogelijk voor de ~7,45kHz afwijking die op de Siglent te zien was).
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [560, 16.0]
+    rotation: 0
+    state: enabled
+- name: iq_state_probe
+  id: variable_function_probe
+  parameters:
+    block_id: epy_block_iq_invert
+    comment: Leest elke 100ms de echte status van het IQ-invert-blok uit, zodat je
+      die als label kunt zien zonder naar de console te hoeven kijken.
+    function_args: ''
+    function_name: get_inverted
+    poll_rate: '10'
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 296.0]
+    rotation: 0
+    state: enabled
+- name: rrc_alpha
+  id: variable
+  parameters:
+    comment: '100% roll-off hoort bij 6,552 MHz (systeem I) - 40% hoort bij 5,85 MHz
+      (systemen B/G/H/L). Bevestigd in het artikel (Repeater 4/1998, p.23-24): bij
+      6,552 MHz draaggolf is de roll-off 100%, niet 40%.'
+    value: '1.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 112.0]
+    rotation: 0
+    state: enabled
+- name: rrc_gain
+  id: variable
+  parameters:
+    comment: ''
+    value: '0.5'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [224, 16.0]
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: 364000 sym/s * sps(2)
+    value: '728000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [384, 16.0]
+    rotation: 0
+    state: enabled
+- name: sps
+  id: variable
+  parameters:
+    comment: ''
+    value: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [320, 16.0]
+    rotation: 0
+    state: enabled
+- name: tx_freq
+  id: variable
+  parameters:
+    comment: Zet hier de Pluto-zendfrequentie zoals nodig voor jouw eigen RF-mixer-opstelling,
+      zodat het resultaat NA de mixer op 6,552 MHz uitkomt (de Pluto zendt dus niet
+      zelf op 6,552 MHz - dat doet je mixer-uitgang). rrc_alpha=1.0 (100% roll-off)
+      hoort wel bij die 6,552 MHz/systeem I-combinatie, ongeacht de Pluto-frequentie
+      zelf.
+    value: '478000000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 200.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_iq_invert
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nIQ Invert Toggle - GNU Radio Embedded Python Block.\n\n\
+      Simpel doorgeefluik voor een complex64-stream, dat via een message-knop\n(QT\
+      \ GUI Message Push Button) live omgeschakeld kan worden tussen normaal\ndoorgeven\
+      \ en het complex conjugeren van het signaal (Q wordt -Q).\n\nWaarom dit nodig\
+      \ is: een externe RF-mixer kan, afhankelijk van of je\nboven- of ondermenging\
+      \ gebruikt, het spectrum spiegelen. Voor een\nQPSK/DQPSK-signaal komt dat neer\
+      \ op het conjugeren van het IQ-signaal (de\nrichting van de fase-rotatie draait\
+      \ om). Met deze knop kun je dat ter\nplekke compenseren/testen zonder de flowgraph\
+      \ te herstarten.\n\"\"\"\n\nimport numpy as np\nfrom gnuradio import gr\nimport\
+      \ pmt\n\n\nclass blk(gr.sync_block):\n\n    def __init__(self):\n        gr.sync_block.__init__(\n\
+      \            self,\n            name='IQ Invert Toggle',\n            in_sig=[np.complex64],\n\
+      \            out_sig=[np.complex64],\n        )\n        self._inverted = False\n\
+      \        self.message_port_register_in(pmt.intern('toggle'))\n        self.set_msg_handler(pmt.intern('toggle'),\
+      \ self._handle_toggle)\n\n    def _handle_toggle(self, msg):\n        self._inverted\
+      \ = not self._inverted\n        state = \"GEINVERTEERD (Q = -Q)\" if self._inverted\
+      \ else \"NORMAAL\"\n        print(f\"[IQ Invert Toggle] nu: {state}\")\n\n \
+      \   def get_inverted(self):\n        return int(self._inverted)\n\n    def work(self,\
+      \ input_items, output_items):\n        in0 = input_items[0]\n        out = output_items[0]\n\
+      \        if self._inverted:\n            out[:] = np.conj(in0)\n        else:\n\
+      \            out[:] = in0\n        return len(out)\n"
+    affinity: ''
+    alias: ''
+    comment: Conjugeert het IQ-signaal (Q = -Q) bij elke druk op de knop. Compenseert
+      boven-/ondermenging-omkering van je externe RF-mixer.
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('IQ Invert Toggle', 'blk', [], [('0', 'complex', 1), ('toggle', 'message',
+      1)], [('0', 'complex', 1)], '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1520, 592.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_nicam_final
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nNICAM 728 Encoder - GNU Radio Embedded Python Block (definitieve\
+      \ versie).\n\nEEN blok, met opzet - niet opgesplitst in losse GRC-blokken. Reden:\
+      \ elke\npoging om de audio-inname als apart, met een echte GNU Radio-stream\n\
+      verbonden blok te laten draaien (audio_source -> custom blok, of\nAudio Input\
+      \ -> NICAM Framer) gaf op deze GNU Radio/Windows-combinatie\nhardnekkige scheduler-problemen\
+      \ (periodieke carrier-dropouts of een\nstructureel tekort aan doorgevoerde audio).\
+      \ De enige aanpak die in\nuitgebreide tests w\xE9l volledig stabiel bleek: alles\
+      \ wat met audio-hardware-\ntiming te maken heeft (opname, resampling, buffering)\
+      \ in \xC9\xC9N self-contained\nbron-blok (gr.sync_block zonder stream-ingang,\
+      \ eigen achtergrondthread).\n\nOm het toch overzichtelijk en volgbaar te houden,\
+      \ is de code hieronder in\nduidelijk genummerde, apart gedocumenteerde stappen\
+      \ opgedeeld - je kunt dus\ngewoon per methode lezen/aanpassen wat er in elke\
+      \ fase van het signaal\ngebeurt, ook al draait het als \xE9\xE9n GRC-blok:\n\
+      \n  STAP 0  Audio-inname (achtergrondthread, sounddevice/PortAudio)\n  STAP\
+      \ 1  Resampling naar 32000 Hz (de door NICAM vereiste samplerate)\n  STAP 2\
+      \  Band-begrenzing (12 kHz laagdoorlaat)\n  STAP 3  CCITT/ITU-T J.17 pre-emphasis\n\
+      \  STAP 4  14-bit kwantisatie + near-instantaneous companding (10 bit + schaalfactor)\n\
+      \  STAP 5  Frame-opbouw (FAW, control-bits, additional data, geluidswoorden)\n\
+      \  STAP 6  Bit-interleaving\n  STAP 7  Energy-dispersal scrambling\n  STAP 8\
+      \  Differentiele QPSK-modulatie\n\nReferenties:\n  - ETS 300 163 (nov. 1994),\
+      \ hoofdstuk 4 en par. 5.3.2 (NICAM-kernspecificatie)\n  - Repeater 4/1998, \"\
+      NICAM-project: digitaal stereogeluid voor TV-amateurs\"\n    (bitvolgorde geluidswoorden:\
+      \ X0 (l.s.b.) eerst, oplopend naar X9 (m.s.b.),\n    dan pas het pariteitsbit\
+      \ P - conform Fig.4)\n  - ITU-T Aanbeveling J.17 (pre-emphase-karakteristiek,\
+      \ geverifieerd tot\n    op 0,01dB tegen de officiele insertion-loss-tabel)\n\
+      \"\"\"\n\nimport math\nimport threading\nfrom collections import deque\n\nimport\
+      \ numpy as np\nfrom scipy.signal import resample_poly, bilinear, lfilter, butter\n\
+      from gnuradio import gr\n\ntry:\n    import sounddevice as sd\nexcept ImportError:\n\
+      \    sd = None\n\n\nclass blk(gr.sync_block):\n\n    # ------------------------------------------------------------------\n\
+      \    # Vaste NICAM-728-constanten (spec-tabellen, zie ETS 300 163 tabel 3\n\
+      \    # en par. 4.1.1/4.2)\n    # ------------------------------------------------------------------\n\
+      \    FAW_BITS = np.array([0, 1, 0, 0, 1, 1, 1, 0], dtype=np.uint8)         \
+      \ # frame alignment word\n    SCALE_CODE = np.array([0b111, 0b110, 0b101, 0b011,\
+      \ 0b100], dtype=np.uint8)  # e (0..4) -> R2R1R0\n    PARITY_LUT = np.array([bin(i).count('1')\
+      \ % 2 for i in range(64)], dtype=np.uint8)\n    STEP_LUT = np.array([0.0, -90.0,\
+      \ -270.0, -180.0], dtype=np.float64)    # DQPSK fasesprongen\n\n    def __init__(self,\
+      \ device_name='', c1c2c3_mode=0, reserve_switch_flag=1,\n                 max_latency_ms=2000,\
+      \ native_samplerate=48000, preemphasis=True,\n                 lowpass_cutoff_hz=12000):\n\
+      \        gr.sync_block.__init__(\n            self,\n            name='NICAM\
+      \ 728 Encoder',\n            in_sig=None,\n            out_sig=[np.complex64],\n\
+      \        )\n        self._init_audio_capture(device_name, max_latency_ms, native_samplerate)\n\
+      \        self._init_filters(preemphasis, lowpass_cutoff_hz)\n        self._init_framer_state(c1c2c3_mode,\
+      \ reserve_switch_flag)\n        self._init_scheduler_tuning()\n        self._init_diagnostics()\n\
+      \n    # ==================================================================\n\
+      \    # STAP 0/1: Audio-inname + resampling - initialisatie\n    # ==================================================================\n\
+      \    def _init_audio_capture(self, device_name, max_latency_ms, native_samplerate):\n\
+      \        \"\"\"Zet de jitterbuffer en audiostream-configuratie klaar. De\n \
+      \       stream zelf wordt pas bij de eerste work()-aanroep gestart (zie\n  \
+      \      _ensure_audio_stream_started), niet hier - GRC maakt tijdens het\n  \
+      \      bewerken van de flowgraph tijdelijke exemplaren van dit blok aan\n  \
+      \      om de in/uitgangen te bepalen, en dat mag geen echte hardware\n     \
+      \   aanraken.\"\"\"\n        self._device_name = device_name\n        self._stream\
+      \ = None\n        self._stream_started = False\n\n        self._native_sr =\
+      \ int(native_samplerate)\n        g = math.gcd(self._native_sr, 32000)\n   \
+      \     self._resample_up = 32000 // g\n        self._resample_down = self._native_sr\
+      \ // g\n\n        max_samples = max(32, int(32000 * max_latency_ms / 1000))\n\
+      \        self._buf_a = deque(maxlen=max_samples)  # linkerkanaal, @ 32kHz, na\
+      \ resampling\n        self._buf_b = deque(maxlen=max_samples)  # rechterkanaal\n\
+      \        self._audio_lock = threading.Lock()\n\n    def _ensure_audio_stream_started(self):\n\
+      \        \"\"\"Start de echte PortAudio-inputstream (pas bij de eerste\n   \
+      \     work()-aanroep - zie _init_audio_capture).\"\"\"\n        if self._stream_started:\n\
+      \            return\n        self._stream_started = True\n        if sd is None:\n\
+      \            print(\"[NICAM encoder] WAARSCHUWING: 'sounddevice' ontbreekt \"\
+      \n                  \"(pip install sounddevice) - geen audio, alleen stilte.\"\
+      )\n            return\n        device = self._device_name if self._device_name\
+      \ else None\n\n        # Vraag de ECHTE default-samplerate van het gekozen apparaat\
+      \ op i.p.v.\n        # te vertrouwen op de handmatig ingevulde native_samplerate-parameter\n\
+      \        # (die kan afwijken per host-API, bv. WASAPI vs MME).\n        actual_sr\
+      \ = self._native_sr\n        try:\n            info = sd.query_devices(device,\
+      \ kind='input')\n            detected_sr = int(round(info['default_samplerate']))\n\
+      \            if detected_sr != self._native_sr:\n                print(f\"[NICAM\
+      \ encoder] Let op: opgegeven native_samplerate=\"\n                      f\"\
+      {self._native_sr} Hz komt niet overeen met de \"\n                      f\"\
+      werkelijke default-samplerate van het apparaat \"\n                      f\"\
+      ({detected_sr} Hz). Gebruik nu {detected_sr} Hz.\")\n            actual_sr =\
+      \ detected_sr\n        except Exception as e:\n            print(f\"[NICAM encoder]\
+      \ kon apparaat-samplerate niet opvragen \"\n                  f\"({e}), val\
+      \ terug op native_samplerate={self._native_sr} Hz.\")\n\n        self._native_sr\
+      \ = actual_sr\n        g = math.gcd(self._native_sr, 32000)\n        self._resample_up\
+      \ = 32000 // g\n        self._resample_down = self._native_sr // g\n\n     \
+      \   try:\n            self._stream = sd.InputStream(\n                samplerate=self._native_sr,\n\
+      \                channels=2,\n                dtype='float32',\n           \
+      \     device=device,\n                callback=self._on_audio_block_received,\n\
+      \                blocksize=0,\n            )\n            self._stream.start()\n\
+      \            print(f\"[NICAM encoder] audiostream gestart @ {self._native_sr}\
+      \ Hz, \"\n                  f\"resample naar 32000 Hz (up={self._resample_up},\
+      \ \"\n                  f\"down={self._resample_down}).\")\n        except Exception\
+      \ as e:\n            print(f\"[NICAM encoder] WAARSCHUWING: kon audiostream\
+      \ niet \"\n                  f\"starten ({e}) - alleen stilte.\")\n        \
+      \    self._stream = None\n\n    def _on_audio_block_received(self, indata, frames,\
+      \ time_info, status):\n        \"\"\"STAP 1: resampling. Draait in PortAudio's\
+      \ eigen achtergrond-\n        thread. Zet native-samplerate audio om naar de\
+      \ 32000 Hz die NICAM\n        vereist (met correcte anti-aliasing filtering),\
+      \ en schrijft het\n        resultaat weg naar de jitterbuffer.\"\"\"\n     \
+      \   if self._resample_up == 1 and self._resample_down == 1:\n            resampled\
+      \ = indata\n        else:\n            resampled = resample_poly(indata, self._resample_up,\
+      \ self._resample_down, axis=0)\n        with self._audio_lock:\n           \
+      \ self._buf_a.extend(resampled[:, 0].tolist())\n            self._buf_b.extend(resampled[:,\
+      \ 1].tolist())\n\n    def _take_32_samples(self, buf):\n        \"\"\"Haalt\
+      \ 32 samples (=1ms @ 32kHz, precies 1 companding-blok) uit\n        de jitterbuffer.\
+      \ Vult aan met stilte als er niet genoeg is - de\n        drager mag NOOIT wachten\
+      \ op audio.\"\"\"\n        n = len(buf)\n        if n >= 32:\n            return\
+      \ np.fromiter((buf.popleft() for _ in range(32)), dtype=np.float32, count=32),\
+      \ False\n        out = np.zeros(32, dtype=np.float32)\n        if n:\n     \
+      \       out[:n] = [buf.popleft() for _ in range(n)]\n        return out, True\n\
+      \n    # ==================================================================\n\
+      \    # STAP 2/3: Band-begrenzing + J.17 pre-emphasis - initialisatie\n    #\
+      \ ==================================================================\n    def\
+      \ _init_filters(self, preemphasis, lowpass_cutoff_hz):\n        self._preemphasis_enabled\
+      \ = bool(preemphasis)\n\n        # STAP 2: band-begrenzing (Butterworth laagdoorlaat).\
+      \ Voorkomt dat\n        # STAP 3 (pre-emphasis) near-Nyquist resampling-restjes/ruis\
+      \ gaat\n        # versterken - zonder dit klinkt pre-emphasis hard/aliasing-achtig.\n\
+      \        self._lp_b, self._lp_a = butter(4, lowpass_cutoff_hz / (32000 / 2),\
+      \ btype='low')\n        self._lp_state_a = np.zeros(max(len(self._lp_b), len(self._lp_a))\
+      \ - 1)\n        self._lp_state_b = np.zeros(max(len(self._lp_b), len(self._lp_a))\
+      \ - 1)\n\n        # STAP 3: CCITT/ITU-T J.17 pre-emphasis. Eerste-orde shelf-filter,\n\
+      \        # geschaald zodat de boost bij 800Hz op 6,5dB uitkomt (de waarde die\n\
+      \        # specifiek voor NICAM/sound-programme is voorgeschreven).\n      \
+      \  # H(f) = 1,103 * (1 + jf/477,15) / (1 + jf/4132,27)\n        f_zero, f_pole,\
+      \ gain0 = 477.15, 4132.27, 1.1030\n        w_z, w_p = 2 * np.pi * f_zero, 2\
+      \ * np.pi * f_pole\n        self._preemph_b, self._preemph_a = bilinear([gain0\
+      \ / w_z, gain0], [1.0 / w_p, 1.0], 32000)\n        self._preemph_state_a = np.zeros(max(len(self._preemph_b),\
+      \ len(self._preemph_a)) - 1)\n        self._preemph_state_b = np.zeros(max(len(self._preemph_b),\
+      \ len(self._preemph_a)) - 1)\n\n    def _apply_filters(self, a_samples, b_samples):\n\
+      \        \"\"\"Past STAP 2 (band-begrenzing) en STAP 3 (pre-emphasis) toe,\n\
+      \        in die volgorde, als continue (stateful) filters over de hele\n   \
+      \     aanroep heen - dus geen resets/kliks per 32-samples-blokje.\"\"\"\n  \
+      \      if not self._preemphasis_enabled:\n            return a_samples, b_samples\n\
+      \n        a, self._lp_state_a = lfilter(self._lp_b, self._lp_a, a_samples, zi=self._lp_state_a)\n\
+      \        b, self._lp_state_b = lfilter(self._lp_b, self._lp_a, b_samples, zi=self._lp_state_b)\n\
+      \n        a, self._preemph_state_a = lfilter(self._preemph_b, self._preemph_a,\
+      \ a, zi=self._preemph_state_a)\n        b, self._preemph_state_b = lfilter(self._preemph_b,\
+      \ self._preemph_a, b, zi=self._preemph_state_b)\n\n        return a.astype(np.float32),\
+      \ b.astype(np.float32)\n\n    # ==================================================================\n\
+      \    # STAP 4: 14-bit kwantisatie + near-instantaneous companding\n    # ==================================================================\n\
+      \    @staticmethod\n    def _quantize_14bit(float_samples):\n        \"\"\"\
+      Zet audiofloat (-1.0 .. +1.0) om naar 14-bit two's-complement\n        int (-8192\
+      \ .. 8191), zoals de NICAM-AD-omzetter dat zou doen.\"\"\"\n        return np.clip(np.round(float_samples\
+      \ * 8191.0), -8192, 8191).astype(np.int32)\n\n    @staticmethod\n    def _redundant_sign_bits(samples14):\n\
+      \        \"\"\"Telt, per sample, hoeveel van de 4 bits direct onder het teken-\n\
+      \        bit gelijk zijn aan het tekenbit (0..4) - bepaalt hoeveel\n       \
+      \ compressie ('coding range', ETS 300 163 tabel 3 / fig.3) mogelijk\n      \
+      \  is zonder informatie te verliezen.\"\"\"\n        s = samples14.astype(np.int32)\
+      \ & 0x3FFF\n        sign = (s >> 13) & 1\n        b12 = ((s >> 12) & 1) == sign\n\
+      \        b11 = ((s >> 11) & 1) == sign\n        b10 = ((s >> 10) & 1) == sign\n\
+      \        b9 = ((s >> 9) & 1) == sign\n        return b12.astype(np.int32) +\
+      \ (b12 & b11) + (b12 & b11 & b10) + (b12 & b11 & b10 & b9)\n\n    def _compand_block(self,\
+      \ samples14):\n        \"\"\"Comprimeert 32 samples van 14 naar 10 bit. Retourneert\
+      \ de 32\n        gecomprimeerde waarden en de gekozen schaalfactor-exponent\
+      \ e (0..4,\n        0=luidst/geen compressie, 4=zachtst/maximale compressie).\"\
+      \"\"\n        s = samples14.astype(np.int32) & 0x3FFF\n        e = int(self._redundant_sign_bits(samples14).min())\
+      \  # geldt voor het HELE blok\n        sign = (s >> 13) & 1\n        mag9 =\
+      \ (s >> (4 - e)) & 0x1FF\n        compressed = (sign << 9) | mag9\n        return\
+      \ compressed.astype(np.uint16), e\n\n    # ==================================================================\n\
+      \    # STAP 5: Frame-opbouw (geluidswoorden + FAW/CI/AD)\n    # ==================================================================\n\
+      \    def _build_sound_payload(self, comp_a, e_a, comp_b, e_b):\n        \"\"\
+      \"Bouwt het 704-bit geluidsgedeelte van het frame: 64 geinter-\n        leaved\
+      \ geluidswoorden van 11 bits (odd=A, even=B), inclusief\n        signalling-in-parity\
+      \ van de schaalfactoren (ETS 300 163 par.\n        4.2.4/4.2.5.5). Bitvolgorde\
+      \ per woord: X0 (l.s.b.) eerst, oplopend\n        naar X9 (m.s.b.), dan pas\
+      \ de pariteitsbit P (Repeater 4/1998 fig.4).\"\"\"\n        rA, rB = int(self.SCALE_CODE[e_a]),\
+      \ int(self.SCALE_CODE[e_b])\n        R2A, R1A, R0A = (rA >> 2) & 1, (rA >> 1)\
+      \ & 1, rA & 1\n        R2B, R1B, R0B = (rB >> 2) & 1, (rB >> 1) & 1, rB & 1\n\
+      \n        # welke van de 64 pariteitsbits gemoduleerd worden met welke\n   \
+      \     # schaalfactor-bit (9 woorden per bit, voor meerderheids-decodering\n\
+      \        # aan ontvangstzijde)\n        flip = np.zeros(64, dtype=np.uint8)\n\
+      \        flip[0:49:6] = R2A\n        flip[1:50:6] = R2B\n        flip[2:51:6]\
+      \ = R1A\n        flip[3:52:6] = R1B\n        flip[4:53:6] = R0A\n        flip[5:54:6]\
+      \ = R0B\n\n        interleaved10 = np.zeros(64, dtype=np.uint16)\n        interleaved10[0::2]\
+      \ = comp_a   # oneven woordnummers = A-kanaal\n        interleaved10[1::2] =\
+      \ comp_b   # even woordnummers = B-kanaal\n\n        top6 = (interleaved10 >>\
+      \ 4) & 0x3F\n        parity = self.PARITY_LUT[top6] ^ flip\n\n        shifts\
+      \ = np.arange(0, 10)  # X0 (l.s.b.) eerst -> X9 (m.s.b.)\n        mag_bits =\
+      \ (interleaved10[:, None] >> shifts[None, :]) & 1\n        words = np.concatenate([mag_bits,\
+      \ parity[:, None]], axis=1)\n        return words.reshape(-1).astype(np.uint8)\
+      \  # 64 * 11 = 704 bits\n\n    def _init_framer_state(self, c1c2c3_mode, reserve_switch_flag):\n\
+      \        modes = {0: (0, 0, 0), 1: (0, 1, 0), 2: (1, 0, 0)}  # stereo / dual-mono\
+      \ / mono+data\n        self._c1c2c3 = modes.get(int(c1c2c3_mode), (0, 0, 0))\n\
+      \        self._c4 = 1 if reserve_switch_flag else 0\n        self._frame_no\
+      \ = 0  # 0..15, voor de frame-flag-bit C0 (16-frame-sequentie)\n        self._phase\
+      \ = 0.0   # lopende draaggolffase (graden), continu over frames heen\n\n   \
+      \     self._interleave_idx = np.array(\n            [(n % 16) * 44 + (n // 16)\
+      \ for n in range(704)]\n        )\n        self._scramble_seq = self._make_scramble_sequence()\
+      \  # zie STAP 7\n\n    def _build_frame(self, comp_a, e_a, comp_b, e_b):\n \
+      \       \"\"\"Bouwt het complete 728-bit frame: FAW (8) + control-bits (5) +\n\
+      \        additional data (11) + geinterleaved+gescrambled geluidsblok (704).\"\
+      \"\"\n        c0 = 1 if self._frame_no < 8 else 0  # frame-flag-bit: 8x '1',\
+      \ dan 8x '0'\n        c1, c2, c3 = self._c1c2c3\n        control_bits = np.array([c0,\
+      \ c1, c2, c3, self._c4], dtype=np.uint8)\n        additional_data = np.zeros(11,\
+      \ dtype=np.uint8)  # gereserveerd, niet gebruikt\n\n        payload = self._build_sound_payload(comp_a,\
+      \ e_a, comp_b, e_b)\n        payload_interleaved = self._interleave(payload)\
+      \                     # STAP 6\n        scrambled = self._scramble(control_bits,\
+      \ additional_data, payload_interleaved)  # STAP 7\n\n        self._frame_no\
+      \ = (self._frame_no + 1) % 16\n        return np.concatenate([self.FAW_BITS,\
+      \ scrambled])  # 8 + 720 = 728 bits\n\n    # ==================================================================\n\
+      \    # STAP 6: Bit-interleaving\n    # ==================================================================\n\
+      \    def _interleave(self, payload_704bits):\n        \"\"\"Herschikt de 704\
+      \ geluidsbits: geschreven in verticale kolommen\n        van 44 bits, uitgelezen\
+      \ in horizontale rijen van 16 bits (ETS 300\n        163 par. 4.1.2 / Repeater\
+      \ 4/1998 fig.5). Verspreidt burst-fouten\n        over meerdere geluidswoorden.\"\
+      \"\"\n        return payload_704bits[self._interleave_idx]\n\n    # ==================================================================\n\
+      \    # STAP 7: Energy-dispersal scrambling\n    # ==================================================================\n\
+      \    @staticmethod\n    def _make_scramble_sequence():\n        \"\"\"9-bit\
+      \ LFSR, polynoom x^9+x^4+1, gereset naar alle-enen bij elke\n        FAW. Omdat\
+      \ de reset elke keer identiek is en het altijd exact 720\n        bits betreft,\
+      \ is de scramble-reeks elk frame identiek - vandaar\n        eenmalig vooraf\
+      \ berekend i.p.v. elke ms opnieuw. Geverifieerd: de\n        eerste 20 bits\
+      \ komen exact overeen met de startreeks uit de spec\n        (\"0000 0111 1011\
+      \ 1110 0010\").\"\"\"\n        state = [1] * 9\n        bits = np.zeros(720,\
+      \ dtype=np.uint8)\n        for i in range(720):\n            fb = state[4] ^\
+      \ state[8]\n            state = [fb] + state[:-1]\n            bits[i] = fb\n\
+      \        return bits\n\n    def _scramble(self, control_bits, additional_data,\
+      \ payload_interleaved):\n        to_scramble = np.concatenate([control_bits,\
+      \ additional_data, payload_interleaved])  # 720 bits\n        return to_scramble\
+      \ ^ self._scramble_seq\n\n    # ==================================================================\n\
+      \    # STAP 8: Differentiele QPSK-modulatie\n    # ==================================================================\n\
+      \    def _modulate_dqpsk(self, frame_bits728):\n        \"\"\"Zet 728 bits om\
+      \ in 364 DQPSK-symbolen. Fasesprongen exact\n        volgens de spec-tabel (par.\
+      \ 5.3.2): 00->0 graden, 01->-90,\n        10->-270, 11->-180. De fase loopt\
+      \ continu door over frames heen\n        (alleen de scrambler wordt per frame\
+      \ gereset, de draaggolffase\n        niet).\"\"\"\n        a = frame_bits728[0::2]\n\
+      \        b = frame_bits728[1::2]\n        idx = a.astype(np.int64) * 2 + b.astype(np.int64)\n\
+      \        steps = self.STEP_LUT[idx]\n        phases = (np.cumsum(steps) + self._phase)\
+      \ % 360.0\n        self._phase = float(phases[-1])\n        rad = np.deg2rad(phases)\n\
+      \        return (np.cos(rad) + 1j * np.sin(rad)).astype(np.complex64)\n\n  \
+      \  # ==================================================================\n  \
+      \  # Scheduler-afstemming (lessen uit eerder debuggen op deze GNU Radio/\n \
+      \   # Windows-combinatie: zonder deze twee regels ontstaan hardnekkige\n   \
+      \ # periodieke carrier-dropouts).\n    # ==================================================================\n\
+      \    def _init_scheduler_tuning(self):\n        self.set_output_multiple(364)\n\
+      \        self.set_max_noutput_items(364 * 50)  # max. 50 frames (~50ms) per\
+      \ work()-aanroep\n\n    def _init_diagnostics(self):\n        self._underrun_frames\
+      \ = 0\n        self._total_frames = 0\n        self._last_report = 0\n\n   \
+      \ def _maybe_report_underrun(self):\n        if self._total_frames - self._last_report\
+      \ >= 5000:\n            self._last_report = self._total_frames\n           \
+      \ pct = 100.0 * self._underrun_frames / max(1, self._total_frames)\n       \
+      \     print(f\"[NICAM encoder] stilte-invulling: {pct:.2f}% \"\n           \
+      \       f\"({self._underrun_frames}/{self._total_frames} frames)\")\n\n    #\
+      \ ==================================================================\n    #\
+      \ GNU Radio scheduler-interface\n    # ==================================================================\n\
+      \    def work(self, input_items, output_items):\n        self._ensure_audio_stream_started()\n\
+      \        out = output_items[0]\n        n_frames = len(out) // 364\n\n     \
+      \   # Lock zo KORT mogelijk vasthouden - alleen om ruwe samples uit de\n   \
+      \     # jitterbuffer te halen. PortAudio's eigen callback-thread heeft\n   \
+      \     # een real-time deadline; als wij de lock te lang vasthouden\n       \
+      \ # tijdens het (tragere) rekenwerk, kan audio verloren gaan.\n        raw_blocks\
+      \ = []\n        with self._audio_lock:\n            for _ in range(n_frames):\n\
+      \                a_f, under_a = self._take_32_samples(self._buf_a)\n       \
+      \         b_f, under_b = self._take_32_samples(self._buf_b)\n              \
+      \  if under_a or under_b:\n                    self._underrun_frames += 1\n\
+      \                raw_blocks.append((a_f, b_f))\n\n        # De filters (STAP\
+      \ 2+3) worden op de HELE aanroep tegelijk toegepast\n        # (aaneengeregen),\
+      \ niet per 32-samples-blokje apart - scipy's\n        # lfilter() heeft namelijk\
+      \ best wat overhead per aanroep, en dat\n        # 50x per work()-aanroep doen\
+      \ i.p.v. 1x is ~20x trager. Dat kostte\n        # eerder precies genoeg extra\
+      \ tijd om de audiothread's real-time\n        # deadline te missen (hoorbaar\
+      \ als geknetter/gekraak/wegvallen).\n        if raw_blocks and self._preemphasis_enabled:\n\
+      \            a_all = np.concatenate([a for a, _ in raw_blocks])\n          \
+      \  b_all = np.concatenate([b for _, b in raw_blocks])\n            a_all, b_all\
+      \ = self._apply_filters(a_all, b_all)\n            raw_blocks = [\n        \
+      \        (a_all[i * 32:(i + 1) * 32], b_all[i * 32:(i + 1) * 32])\n        \
+      \        for i in range(len(raw_blocks))\n            ]\n\n        produced\
+      \ = 0\n        for a_f, b_f in raw_blocks:\n            a14 = self._quantize_14bit(a_f)\
+      \                                # STAP 4\n            b14 = self._quantize_14bit(b_f)\n\
+      \            comp_a, e_a = self._compand_block(a14)\n            comp_b, e_b\
+      \ = self._compand_block(b14)\n\n            frame_bits = self._build_frame(comp_a,\
+      \ e_a, comp_b, e_b)       # STAP 5,6,7\n            out[produced:produced +\
+      \ 364] = self._modulate_dqpsk(frame_bits)  # STAP 8\n            produced +=\
+      \ 364\n            self._total_frames += 1\n\n        self._maybe_report_underrun()\n\
+      \        return produced\n\n    def stop(self):\n        if self._stream is\
+      \ not None:\n            try:\n                self._stream.stop()\n       \
+      \         self._stream.close()\n            except Exception:\n            \
+      \    pass\n        return True\n"
+    affinity: ''
+    alias: ''
+    c1c2c3_mode: '0'
+    comment: 'Echte audio via eigen achtergrondthread (sounddevice/PortAudio), losgekoppeld
+      van GNU Radio''s scheduler. Vereist: pip install sounddevice. device_name leeg
+      = standaard geluidsapparaat.'
+    device_name: '"Voicemeeter Out B3 (VB-Audio Voicemeeter VAIO), Windows WASAPI"'
+    lowpass_cutoff_hz: '12000'
+    max_latency_ms: '2000'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    native_samplerate: '48000'
+    preemphasis: 'True'
+    reserve_switch_flag: '1'
+  states:
+    _io_cache: ('NICAM 728 Encoder', 'blk', [('device_name', "''"), ('c1c2c3_mode',
+      '0'), ('reserve_switch_flag', '1'), ('max_latency_ms', '2000'), ('native_samplerate',
+      '48000'), ('preemphasis', 'True'), ('lowpass_cutoff_hz', '12000')], [], [('0',
+      'complex', 1)], '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 536.0]
+    rotation: 0
+    state: enabled
+- name: iio_pluto_sink_0
+  id: iio_pluto_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    attenuation1: '8'
+    bandwidth: '1200000'
+    buffer_size: '10000'
+    comment: ''
+    cyclic: 'False'
+    filter: ''
+    filter_source: '''Auto'''
+    fpass: '0'
+    frequency: tx_freq+freq_trim
+    fstop: '0'
+    len_tag_key: ''
+    samplerate: samp_rate
+    type: fc32
+    uri: 192.168.1.61
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1712, 352.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_const_sink_x_0
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    grid: 'False'
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '0'
+    marker10: '0'
+    marker2: '0'
+    marker3: '0'
+    marker4: '0'
+    marker5: '0'
+    marker6: '0'
+    marker7: '0'
+    marker8: '0'
+    marker9: '0'
+    name: '"CONSTELLATION DQPSK"'
+    nconnections: '1'
+    size: '1024'
+    style1: '0'
+    style10: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '2'
+    xmin: '-2'
+    ymax: '2'
+    ymin: '-2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1720, 840.0]
+    rotation: 0
+    state: enabled
+- name: root_raised_cosine_filter_0
+  id: root_raised_cosine_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: rrc_alpha
+    comment: ''
+    decim: '1'
+    gain: rrc_gain
+    interp: sps
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    ntaps: '50'
+    samp_rate: samp_rate
+    sym_rate: samp_rate/sps
+    type: interp_fir_filter_ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [816, 544.0]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_msg_push_button_0_0
+  id: variable_qtgui_msg_push_button
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: '"Invert I/Q (mixer boven-/ondermenging)"'
+    msgName: pressed
+    relBackgroundColor: default
+    relFontColor: default
+    type: int
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1000, 728.0]
+    rotation: 0
+    state: enabled
+
+connections:
+- [epy_block_iq_invert, '0', iio_pluto_sink_0, '0']
+- [epy_block_iq_invert, '0', qtgui_const_sink_x_0, '0']
+- [epy_block_nicam_final, '0', root_raised_cosine_filter_0, '0']
+- [root_raised_cosine_filter_0, '0', epy_block_iq_invert, '0']
+- [variable_qtgui_msg_push_button_0_0, pressed, epy_block_iq_invert, toggle]
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.12.0
