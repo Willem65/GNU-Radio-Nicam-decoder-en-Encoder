@@ -1,0 +1,940 @@
+options:
+  parameters:
+    author: ''
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: DQPSKproject1
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: '1'
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: RX NICAM Receiver
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 8.0]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: BW_tune
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: '"BW"'
+    min_len: '20'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0.1'
+    step: '0.01'
+    stop: '2.0'
+    value: '1.5'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [696, 768.0]
+    rotation: 0
+    state: enabled
+- name: Fil_Gain
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: '"Filter Gain"'
+    min_len: '20'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0.5'
+    step: '0.04'
+    stop: '2.0'
+    value: '1.3'
+    widget: slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [536, 768.0]
+    rotation: 0
+    state: enabled
+- name: buffer_size
+  id: variable
+  parameters:
+    comment: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 184.0]
+    rotation: 0
+    state: enabled
+- name: freq_tune
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: '"Frequentie"'
+    min_len: '20'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: '477000000'
+    step: '100'
+    stop: '479700000'
+    value: '477999500'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [40, 552.0]
+    rotation: 0
+    state: enabled
+- name: qpsk_const
+  id: variable_constellation
+  parameters:
+    comment: ''
+    const_points: '[1+1j, -1+1j, -1-1j, 1-1j]'
+    dims: '1'
+    normalization: digital.constellation.AMPLITUDE_NORMALIZATION
+    npwr: '1.0'
+    precision: '8'
+    rot_sym: '4'
+    soft_dec_lut: None
+    sym_map: '[0, 1, 2, 3]'
+    type: qpsk
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1320, 328.0]
+    rotation: 0
+    state: enabled
+- name: qpsk_const_0
+  id: variable_constellation
+  parameters:
+    comment: ''
+    const_points: '[1+1j, -1+1j, -1-1j, 1-1j]'
+    dims: '1'
+    normalization: digital.constellation.AMPLITUDE_NORMALIZATION
+    npwr: '1.0'
+    precision: '8'
+    rot_sym: '4'
+    soft_dec_lut: None
+    sym_map: '[0, 1, 2, 3]'
+    type: qpsk
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1320, 600.0]
+    rotation: 0
+    state: enabled
+- name: rrc_alpha
+  id: variable
+  parameters:
+    comment: ''
+    value: '1.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [136, 800.0]
+    rotation: 0
+    state: enabled
+- name: rrc_gain
+  id: variable
+  parameters:
+    comment: ''
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 800.0]
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '728000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 112.0]
+    rotation: 0
+    state: enabled
+- name: sps
+  id: variable
+  parameters:
+    comment: ''
+    value: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [112, 112.0]
+    rotation: 0
+    state: enabled
+- name: blocks_file_sink_0_0_0_0
+  id: blocks_file_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    comment: ''
+    file: C:\temp\na_diff.ts
+    type: byte
+    unbuffered: 'False'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1800, 264.0]
+    rotation: 0
+    state: enabled
+- name: blocks_file_sink_0_0_1
+  id: blocks_file_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    comment: ''
+    file: C:\temp\voor_diff.ts
+    type: byte
+    unbuffered: 'False'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1544, 272.0]
+    rotation: 0
+    state: enabled
+- name: blocks_unpack_k_bits_bb_0
+  id: blocks_unpack_k_bits_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    k: '2'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1568, 656.0]
+    rotation: 0
+    state: enabled
+- name: digital_constellation_decoder_cb_0
+  id: digital_constellation_decoder_cb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: qpsk_const
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1320, 408.0]
+    rotation: 0
+    state: enabled
+- name: digital_costas_loop_cc_0
+  id: digital_costas_loop_cc
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: buffer_size
+    order: '4'
+    use_snr: 'False'
+    w: '0.6'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1104, 496.0]
+    rotation: 0
+    state: enabled
+- name: digital_diff_decoder_bb_0
+  id: digital_diff_decoder_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    coding: digital.DIFF_DIFFERENTIAL
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    modulus: '4'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1560, 480.0]
+    rotation: 0
+    state: enabled
+- name: digital_map_bb_0
+  id: digital_map_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    map: '[0,2,3,1]'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1568, 584.0]
+    rotation: 0
+    state: enabled
+- name: digital_map_bb_0_0_0_0
+  id: digital_map_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    map: '[1,2,0,3]'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1544, 408.0]
+    rotation: 0
+    state: enabled
+- name: digital_symbol_sync_xx_0
+  id: digital_symbol_sync_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: digital.constellation_qpsk().base()
+    damping: '1.414'
+    loop_bw: '0.5'
+    max_dev: '1.5'
+    maxoutbuf: '0'
+    minoutbuf: buffer_size
+    nfilters: '128'
+    osps: '1'
+    pfb_mf_taps: '[]'
+    resamp_type: digital.IR_MMSE_8TAP
+    sps: sps
+    ted_gain: '1'
+    ted_type: digital.TED_GARDNER
+    type: cc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [800, 512.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_0_1_0
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nNICAM 728 Decoder - GNU Radio Embedded Python Block.\n\n\
+      Het spiegelbeeld van de bestaande encoder (epy_block_nicam_final): waar de\n\
+      encoder van stereo-audio naar een complex64 DQPSK-stream ging, gaat dit\nblok\
+      \ van een RUWE BITSTROOM (na framesync-loze demodulatie) terug naar\nstereo-audio,\
+      \ die live wordt afgespeeld via sounddevice/PortAudio.\n\nVERWACHTE PLAATS IN\
+      \ JOUW FLOWGRAPH (op basis van je screenshot):\n\n    Pluto RX -> ... -> Symbol\
+      \ Sync -> Costas Loop -> Constellation Decoder\n             -> Differential\
+      \ Decoder -> Map -> Unpack K Bits -> [DIT BLOK]\n\n\"Unpack K Bits\" (K=2) levert\
+      \ 1 losse bit per output-item (waarde 0 of 1,\nals byte/uchar) - dat is precies\
+      \ de invoer die dit blok verwacht:\n    in_sig  = [np.uint8]      (1 bit per\
+      \ sample, 728 kbit/s)\n    out_sig = []               (geen stream-uitgang -\
+      \ audio gaat direct\n                                 naar de geluidskaart,\
+      \ net zoals de encoder\n                                 audio direct van de\
+      \ geluidskaart INNAM)\n\nNet als bij de encoder geldt hier: alles wat met audio-hardware-timing\
+      \ te\nmaken heeft (afspelen) draait in een eigen achtergrondthread (PortAudio's\n\
+      output-callback), losgekoppeld van de GNU Radio-scheduler-thread via een\njitterbuffer\
+      \ - exact de architectuur die we bij de encoder al hadden\nuitgewerkt, nu in\
+      \ de andere richting.\n\nDe negen STAP-pen zijn hier het spiegelbeeld van de\
+      \ encoder:\n\n  STAP D1  Framesynchronisatie (FAW zoeken/vasthouden in de bitstroom)\n\
+      \  STAP D2  Descramblen (dezelfde LFSR-reeks als de encoder, XOR terug)\n  STAP\
+      \ D3  De-interleaven (inverse permutatie van de encoder-interleave)\n  STAP\
+      \ D4  Control-bits + additional data uitlezen\n  STAP D5  Schaalfactor terugwinnen\
+      \ (meerderheidsstem over de 9 pariteitsbits)\n  STAP D6  Decompanderen (10 bit\
+      \ + schaalfactor -> 14-bit sample)\n  STAP D7  De-emphasis (inverse J.17-filter)\n\
+      \  STAP D8  Resample naar de native samplerate van de geluidskaart + afspelen\n\
+      \nReferenties: zie epy_block_nicam_final.py (ETS 300 163, Repeater 4/1998,\n\
+      ITU-T J.17) - dezelfde spec, nu in omgekeerde richting toegepast.\n\"\"\"\n\n\
+      import math\nimport threading\nfrom collections import deque\n\nimport numpy\
+      \ as np\nfrom scipy.signal import resample_poly, bilinear, lfilter\nfrom gnuradio\
+      \ import gr\n\ntry:\n    import sounddevice as sd\nexcept ImportError:\n   \
+      \ sd = None\n\n\nclass blk(gr.sync_block):\n\n    # ------------------------------------------------------------------\n\
+      \    # Zelfde vaste NICAM-728-constanten als de encoder (moeten identiek\n \
+      \   # zijn - het zijn twee kanten van dezelfde spec).\n    # ------------------------------------------------------------------\n\
+      \    FAW_BITS = np.array([0, 1, 0, 0, 1, 1, 1, 0], dtype=np.uint8)\n    SCALE_CODE\
+      \ = np.array([0b111, 0b110, 0b101, 0b011, 0b100], dtype=np.uint8)\n    CODE_TO_E\
+      \ = {int(code): e for e, code in enumerate(SCALE_CODE)}\n    PARITY_LUT = np.array([bin(i).count('1')\
+      \ % 2 for i in range(64)], dtype=np.uint8)\n\n    # inverse van encoder's self._interleave_idx\
+      \ (eenmalig te berekenen,\n    # zie STAP D3 hieronder)\n    _ENC_INTERLEAVE_IDX\
+      \ = np.array([(n % 16) * 44 + (n // 16) for n in range(704)])\n\n    def __init__(self,\
+      \ device_name='', native_samplerate=48000,\n                 apply_deemphasis=True,\
+      \ lock_confirm_frames=3,\n                 lock_loss_frames=4, output_gain=1.0,\
+      \ max_latency_ms=500):\n        gr.sync_block.__init__(\n            self,\n\
+      \            name='NICAM 728 Decoder',\n            in_sig=[np.uint8],\n   \
+      \         out_sig=[],\n        )\n        self._init_audio_output(device_name,\
+      \ native_samplerate, max_latency_ms)\n        self._init_deemphasis(apply_deemphasis)\n\
+      \        self._init_frame_sync(lock_confirm_frames, lock_loss_frames)\n    \
+      \    self._output_gain = float(output_gain)\n        self._init_diagnostics()\n\
+      \n    # ==================================================================\n\
+      \    # STAP D8 (uitvoerkant): audio-uitvoer - initialisatie\n    # ==================================================================\n\
+      \    def _init_audio_output(self, device_name, native_samplerate, max_latency_ms):\n\
+      \        \"\"\"Zelfde voorzichtigheidsprincipe als de encoder: de echte\n  \
+      \      PortAudio-stream wordt pas bij de eerste work()-aanroep gestart,\n  \
+      \      niet hier - GRC maakt tijdens het bewerken van de flowgraph\n       \
+      \ tijdelijke exemplaren van dit blok aan.\"\"\"\n        self._device_name =\
+      \ device_name\n        self._stream = None\n        self._stream_started = False\n\
+      \n        self._native_sr = int(native_samplerate)\n        g = math.gcd(32000,\
+      \ self._native_sr)\n        self._resample_up = self._native_sr // g\n     \
+      \   self._resample_down = 32000 // g\n\n        max_samples = max(64, int(self._native_sr\
+      \ * max_latency_ms / 1000))\n        self._out_buf_a = deque(maxlen=max_samples)\
+      \  # links, @ native_samplerate\n        self._out_buf_b = deque(maxlen=max_samples)\
+      \  # rechts\n        self._out_lock = threading.Lock()\n\n    def _ensure_audio_output_started(self):\n\
+      \        if self._stream_started:\n            return\n        self._stream_started\
+      \ = True\n        if sd is None:\n            print(\"[NICAM decoder] WAARSCHUWING:\
+      \ 'sounddevice' ontbreekt \"\n                  \"(pip install sounddevice)\
+      \ - geen audio-uitvoer.\")\n            return\n        device = self._device_name\
+      \ if self._device_name else None\n        if isinstance(device, str) and device.strip().isdigit():\n\
+      \            # numerieke apparaat-index (bv. \"100\") -> als integer doorgeven,\n\
+      \            # zodat dubbelzinnige naamconflicten (meerdere host-API's met\n\
+      \            # dezelfde apparaatnaam, zoals DirectSound + WASAPI) omzeild\n\
+      \            # worden. sounddevice matcht een STRING altijd op naam-substring,\n\
+      \            # nooit op index - vandaar deze expliciete conversie.\n       \
+      \     device = int(device.strip())\n\n        actual_sr = self._native_sr\n\
+      \        self._out_channels = 2\n        try:\n            info = sd.query_devices(device,\
+      \ kind='output')\n            detected_sr = int(round(info['default_samplerate']))\n\
+      \            if detected_sr != self._native_sr:\n                print(f\"[NICAM\
+      \ decoder] Let op: opgegeven native_samplerate=\"\n                      f\"\
+      {self._native_sr} Hz komt niet overeen met de \"\n                      f\"\
+      werkelijke default-samplerate van het uitvoerapparaat \"\n                 \
+      \     f\"({detected_sr} Hz). Gebruik nu {detected_sr} Hz.\")\n            actual_sr\
+      \ = detected_sr\n            # veel virtuele apparaten (VB-Cable/Voicemeeter-stroken)\
+      \ bieden\n            # meer dan 2 uitvoerkanalen aan (vaak 8) en weigeren een\
+      \ harde\n            # 2-kanaals-aanvraag. Gebruik het werkelijke aantal, en\
+      \ zet\n            # straks L/R op de eerste twee kanalen, de rest stil.\n \
+      \           max_ch = int(info['max_output_channels'])\n            if max_ch\
+      \ < 2:\n                print(f\"[NICAM decoder] WAARSCHUWING: apparaat biedt\
+      \ maar \"\n                      f\"{max_ch} uitvoerkanaal/kanalen aan (geen\
+      \ stereo mogelijk).\")\n                self._out_channels = max(1, max_ch)\n\
+      \            elif max_ch != 2:\n                print(f\"[NICAM decoder] apparaat\
+      \ biedt {max_ch} uitvoerkanalen \"\n                      f\"aan (i.p.v. 2)\
+      \ - gebruik dat aantal, L/R op kanaal 0/1, \"\n                      f\"rest\
+      \ stil.\")\n                self._out_channels = max_ch\n        except Exception\
+      \ as e:\n            print(f\"[NICAM decoder] kon apparaat-samplerate/kanalen\
+      \ niet \"\n                  f\"opvragen ({e}), val terug op native_samplerate=\"\
+      \n                  f\"{self._native_sr} Hz, 2 kanalen.\")\n\n        self._native_sr\
+      \ = actual_sr\n        g = math.gcd(32000, self._native_sr)\n        self._resample_up\
+      \ = self._native_sr // g\n        self._resample_down = 32000 // g\n\n     \
+      \   try:\n            self._stream = sd.OutputStream(\n                samplerate=self._native_sr,\n\
+      \                channels=self._out_channels,\n                dtype='float32',\n\
+      \                device=device,\n                callback=self._on_audio_output_needed,\n\
+      \                blocksize=0,\n            )\n            self._stream.start()\n\
+      \            print(f\"[NICAM decoder] audio-uitvoer gestart @ {self._native_sr}\
+      \ Hz, \"\n                  f\"resample vanaf 32000 Hz (up={self._resample_up},\
+      \ \"\n                  f\"down={self._resample_down}).\")\n        except Exception\
+      \ as e:\n            print(f\"[NICAM decoder] WAARSCHUWING: kon audio-uitvoer\
+      \ niet \"\n                  f\"starten ({e}) - geen geluid.\")\n          \
+      \  self._stream = None\n\n    def _on_audio_output_needed(self, outdata, frames,\
+      \ time_info, status):\n        \"\"\"Draait in PortAudio's eigen achtergrondthread.\
+      \ Haalt klaar-\n        liggende samples uit de jitterbuffer; vult aan met stilte\
+      \ (en\n        telt een underrun) als er niet genoeg klaarligt - het afspelen\n\
+      \        mag NOOIT wachten op de decoder.\"\"\"\n        with self._out_lock:\n\
+      \            outdata[:, :] = 0.0  # eerst alles stil - vooral belangrijk voor\n\
+      \                                  # kanalen 2+ bij apparaten met >2 kanalen,\n\
+      \                                  # want outdata is niet gegarandeerd leeg\n\
+      \            n = min(frames, len(self._out_buf_a))\n            if n < frames:\n\
+      \                self._out_underruns += 1\n            for i in range(n):\n\
+      \                outdata[i, 0] = self._out_buf_a.popleft()\n               \
+      \ if self._out_channels > 1:\n                    outdata[i, 1] = self._out_buf_b.popleft()\n\
+      \                else:\n                    self._out_buf_b.popleft()  # mono\
+      \ apparaat: R-kanaal weggooien\n\n    # ==================================================================\n\
+      \    # STAP D7: de-emphasis - initialisatie (exacte inverse van encoder's\n\
+      \    # J.17 pre-emphasis-filter: num/den omgewisseld = 1/H(z))\n    # ==================================================================\n\
+      \    def _init_deemphasis(self, apply_deemphasis):\n        self._deemphasis_enabled\
+      \ = bool(apply_deemphasis)\n        f_zero, f_pole, gain0 = 477.15, 4132.27,\
+      \ 1.1030\n        w_z, w_p = 2 * np.pi * f_zero, 2 * np.pi * f_pole\n      \
+      \  preemph_b, preemph_a = bilinear([gain0 / w_z, gain0], [1.0 / w_p, 1.0], 32000)\n\
+      \        # inverse filter: H_deemph(z) = 1 / H_preemph(z) => teller/noemer omdraaien\n\
+      \        self._deemph_b, self._deemph_a = preemph_a, preemph_b\n        self._deemph_state_a\
+      \ = np.zeros(max(len(self._deemph_b), len(self._deemph_a)) - 1)\n        self._deemph_state_b\
+      \ = np.zeros(max(len(self._deemph_b), len(self._deemph_a)) - 1)\n\n    def _apply_deemphasis(self,\
+      \ a_samples, b_samples):\n        if not self._deemphasis_enabled or len(a_samples)\
+      \ == 0:\n            return a_samples, b_samples\n        a, self._deemph_state_a\
+      \ = lfilter(self._deemph_b, self._deemph_a, a_samples, zi=self._deemph_state_a)\n\
+      \        b, self._deemph_state_b = lfilter(self._deemph_b, self._deemph_a, b_samples,\
+      \ zi=self._deemph_state_b)\n        return a.astype(np.float32), b.astype(np.float32)\n\
+      \n    # ==================================================================\n\
+      \    # STAP D1: framesynchronisatie - initialisatie\n    # ==================================================================\n\
+      \    def _init_frame_sync(self, lock_confirm_frames, lock_loss_frames):\n  \
+      \      self._bitbuf = np.zeros(0, dtype=np.uint8)\n        self._locked = False\n\
+      \        self._miss_streak = 0\n        self._lock_confirm_frames = int(lock_confirm_frames)\n\
+      \        self._lock_loss_frames = int(lock_loss_frames)\n        self._search_cap\
+      \ = 8 * 728          # max. bits die we bufferen tijdens zoeken\n        self._search_min\
+      \ = (lock_confirm_frames + 1) * 728\n\n        # scramble-reeks is deterministisch\
+      \ en elke frame identiek (reset\n        # bij elke FAW) - zie epy_block_nicam_final.py\
+      \ STAP 7\n        self._scramble_seq = self._make_scramble_sequence()\n\n  \
+      \      # inverse permutatie van de encoder-interleave, eenmalig\n        inv_idx\
+      \ = np.empty(704, dtype=np.int64)\n        inv_idx[self._ENC_INTERLEAVE_IDX]\
+      \ = np.arange(704)\n        self._deinterleave_idx = inv_idx\n\n    @staticmethod\n\
+      \    def _make_scramble_sequence():\n        \"\"\"Identiek aan encoder's _make_scramble_sequence().\"\
+      \"\"\n        state = [1] * 9\n        bits = np.zeros(720, dtype=np.uint8)\n\
+      \        for i in range(720):\n            fb = state[4] ^ state[8]\n      \
+      \      state = [fb] + state[:-1]\n            bits[i] = fb\n        return bits\n\
+      \n    def _try_acquire_lock(self):\n        \"\"\"Correleert over alle 728 mogelijke\
+      \ bit-offsets, kijkt welke\n        offset de FAW het meest consistent laat\
+      \ terugkomen over meerdere\n        opeenvolgende frames, en vergrendelt daarop\
+      \ als de score goed\n        genoeg is.\"\"\"\n        buf = self._bitbuf\n\
+      \        check_frames = self._lock_confirm_frames\n        needed = check_frames\
+      \ * 728 + 8\n        if len(buf) < needed:\n            return False\n\n   \
+      \     best_offset, best_score = 0, -1.0\n        for offset in range(728):\n\
+      \            total = 0\n            for k in range(check_frames):\n        \
+      \        start = offset + k * 728\n                total += int(np.sum(buf[start:start\
+      \ + 8] == self.FAW_BITS))\n            score = total / (8.0 * check_frames)\n\
+      \            if score > best_score:\n                best_offset, best_score\
+      \ = offset, score\n\n        if best_score >= 0.90:\n            self._bitbuf\
+      \ = buf[best_offset:]\n            self._locked = True\n            self._miss_streak\
+      \ = 0\n            self._lock_events += 1\n            print(f\"[NICAM decoder]\
+      \ frame-lock verkregen (score={best_score:.2f})\")\n            return True\n\
+      \n        # geen lock gevonden - buffer beperkt houden, verder wachten op data\n\
+      \        if len(self._bitbuf) > self._search_cap:\n            self._bitbuf\
+      \ = self._bitbuf[-self._search_cap:]\n        return False\n\n    # ==================================================================\n\
+      \    # STAP D5: schaalfactor terugwinnen (meerderheidsstem)\n    # ==================================================================\n\
+      \    @staticmethod\n    def _majority(bits):\n        return int(np.mean(bits)\
+      \ > 0.5)\n\n    def _recover_scale_factors(self, flip_received):\n        R2A\
+      \ = self._majority(flip_received[0:49:6])\n        R2B = self._majority(flip_received[1:50:6])\n\
+      \        R1A = self._majority(flip_received[2:51:6])\n        R1B = self._majority(flip_received[3:52:6])\n\
+      \        R0A = self._majority(flip_received[4:53:6])\n        R0B = self._majority(flip_received[5:54:6])\n\
+      \        rA = (R2A << 2) | (R1A << 1) | R0A\n        rB = (R2B << 2) | (R1B\
+      \ << 1) | R0B\n        e_a = self.CODE_TO_E.get(rA, 0)\n        e_b = self.CODE_TO_E.get(rB,\
+      \ 0)\n        return e_a, e_b\n\n    # ==================================================================\n\
+      \    # STAP D6: decompanderen (exacte inverse van encoder's _compand_block)\n\
+      \    # ==================================================================\n\
+      \    @staticmethod\n    def _decompand_block(compressed10, e):\n        sign\
+      \ = (compressed10 >> 9) & 1\n        mag9 = (compressed10 & 0x1FF).astype(np.int32)\n\
+      \        mag_shifted = mag9 << (4 - e)\n        redundant_mask = ((1 << e) -\
+      \ 1) << (13 - e) if e > 0 else 0\n        redundant_val = np.where(sign == 1,\
+      \ redundant_mask, 0)\n        s14 = (sign.astype(np.int32) << 13) | redundant_val\
+      \ | mag_shifted\n        signed = np.where(s14 >= 8192, s14 - 16384, s14)\n\
+      \        return (signed.astype(np.float32) / 8191.0)\n\n    # ==================================================================\n\
+      \    # STAP D2/D3/D4/D5/D6 samen: \xE9\xE9n frame (728 bits) -> 32+32 samples\n\
+      \    # ==================================================================\n\
+      \    def _decode_frame(self, frame_bits728):\n        faw_ok = int(np.sum(frame_bits728[:8]\
+      \ == self.FAW_BITS)) >= 6  # tolerant voor 1-2 bitfouten\n\n        # STAP D2:\
+      \ descramblen\n        descrambled = frame_bits728[8:] ^ self._scramble_seq\
+      \   # 720 bits\n\n        # STAP D4: control-bits + additional data (nu niet\
+      \ verder gebruikt,\n        # maar wel afgesplitst zodat je ze later kunt uitlezen,\
+      \ bv. C1C2C3\n        # voor stereo/mono-detectie)\n        control_bits = descrambled[0:5]\n\
+      \        payload_interleaved = descrambled[16:16 + 704]\n\n        # STAP D3:\
+      \ de-interleaven\n        payload = payload_interleaved[self._deinterleave_idx]\n\
+      \n        # woorden uitpakken: 64 x 11 bits (10 magnitude + 1 pariteit)\n  \
+      \      words = payload.reshape(64, 11)\n        mag_bits = words[:, 0:10]\n\
+      \        parity_bits = words[:, 10]\n        shifts = np.arange(10)\n      \
+      \  interleaved10 = (mag_bits.astype(np.uint16) << shifts).sum(axis=1)\n\n  \
+      \      top6 = (interleaved10 >> 4) & 0x3F\n        flip_received = parity_bits\
+      \ ^ self.PARITY_LUT[top6]\n\n        # STAP D5\n        e_a, e_b = self._recover_scale_factors(flip_received)\n\
+      \n        comp_a = interleaved10[0::2]  # 32 woorden, A-kanaal\n        comp_b\
+      \ = interleaved10[1::2]  # 32 woorden, B-kanaal\n\n        # STAP D6\n     \
+      \   a_f = self._decompand_block(comp_a, e_a)\n        b_f = self._decompand_block(comp_b,\
+      \ e_b)\n\n        return a_f, b_f, faw_ok, control_bits\n\n    # ==================================================================\n\
+      \    # Diagnostiek\n    # ==================================================================\n\
+      \    def _init_diagnostics(self):\n        self._out_underruns = 0\n       \
+      \ self._lock_events = 0\n        self._frames_decoded = 0\n        self._faw_errors\
+      \ = 0\n        self._last_report = 0\n\n    def _maybe_report_status(self):\n\
+      \        if self._frames_decoded - self._last_report >= 5000:\n            self._last_report\
+      \ = self._frames_decoded\n            pct = 100.0 * self._faw_errors / max(1,\
+      \ self._frames_decoded)\n            print(f\"[NICAM decoder] status: {self._frames_decoded}\
+      \ frames, \"\n                  f\"FAW-afwijkingen {pct:.2f}%, audio-underruns\
+      \ {self._out_underruns}, \"\n                  f\"lock-events {self._lock_events}\"\
+      )\n\n    # ==================================================================\n\
+      \    # GNU Radio scheduler-interface\n    # ==================================================================\n\
+      \    def work(self, input_items, output_items):\n        self._ensure_audio_output_started()\n\
+      \        new_bits = input_items[0]\n        self._bitbuf = np.concatenate([self._bitbuf,\
+      \ new_bits])\n\n        if not self._locked:\n            self._try_acquire_lock()\n\
+      \n        a_chunks, b_chunks = [], []\n        if self._locked:\n          \
+      \  while len(self._bitbuf) >= 728:\n                frame = self._bitbuf[:728]\n\
+      \                self._bitbuf = self._bitbuf[728:]\n\n                a_f, b_f,\
+      \ faw_ok, _ctrl = self._decode_frame(frame)\n                a_chunks.append(a_f)\n\
+      \                b_chunks.append(b_f)\n                self._frames_decoded\
+      \ += 1\n\n                if faw_ok:\n                    self._miss_streak\
+      \ = 0\n                else:\n                    self._miss_streak += 1\n \
+      \                   self._faw_errors += 1\n                    if self._miss_streak\
+      \ >= self._lock_loss_frames:\n                        self._locked = False\n\
+      \                        print(f\"[NICAM decoder] frame-lock VERLOREN na \"\n\
+      \                              f\"{self._miss_streak} opeenvolgende FAW-fouten\"\
+      )\n                        break\n\n        if a_chunks:\n            a_all\
+      \ = np.concatenate(a_chunks)\n            b_all = np.concatenate(b_chunks)\n\
+      \n            # STAP D7: de-emphasis, over de hele batch tegelijk (zelfde\n\
+      \            # reden als bij de encoder: lfilter() per klein blokje apart\n\
+      \            # aanroepen is veel duurder dan \xE9\xE9n keer over de hele batch)\n\
+      \            a_all, b_all = self._apply_deemphasis(a_all, b_all)\n\n       \
+      \     # STAP D8: resample 32kHz -> native samplerate geluidskaart\n        \
+      \    if self._resample_up != 1 or self._resample_down != 1:\n              \
+      \  a_out = resample_poly(a_all, self._resample_up, self._resample_down)\n  \
+      \              b_out = resample_poly(b_all, self._resample_up, self._resample_down)\n\
+      \            else:\n                a_out, b_out = a_all, b_all\n\n        \
+      \    a_out = np.clip(a_out * self._output_gain, -1.0, 1.0)\n            b_out\
+      \ = np.clip(b_out * self._output_gain, -1.0, 1.0)\n\n            with self._out_lock:\n\
+      \                self._out_buf_a.extend(a_out.tolist())\n                self._out_buf_b.extend(b_out.tolist())\n\
+      \n        self._maybe_report_status()\n        return len(new_bits)\n\n    def\
+      \ stop(self):\n        if self._stream is not None:\n            try:\n    \
+      \            self._stream.stop()\n                self._stream.close()\n   \
+      \         except Exception:\n                pass\n        return True\n"
+    affinity: ''
+    alias: ''
+    apply_deemphasis: 'True'
+    comment: ''
+    device_name: '100'
+    lock_confirm_frames: '3'
+    lock_loss_frames: '4'
+    max_latency_ms: '2000'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    native_samplerate: '48000'
+    output_gain: '1'
+  states:
+    _io_cache: ('NICAM 728 Decoder', 'blk', [('device_name', "''"), ('native_samplerate',
+      '48000'), ('apply_deemphasis', 'True'), ('lock_confirm_frames', '3'), ('lock_loss_frames',
+      '4'), ('output_gain', '1.0'), ('max_latency_ms', '500')], [('0', 'byte', 1)],
+      [], '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1752, 496.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_iq_invert
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nIQ Invert Toggle - GNU Radio Embedded Python Block.\n\n\
+      Simpel doorgeefluik voor een complex64-stream, dat via een message-knop\n(QT\
+      \ GUI Message Push Button) live omgeschakeld kan worden tussen normaal\ndoorgeven\
+      \ en het complex conjugeren van het signaal (Q wordt -Q).\n\nWaarom dit nodig\
+      \ is: een externe RF-mixer kan, afhankelijk van of je\nboven- of ondermenging\
+      \ gebruikt, het spectrum spiegelen. Voor een\nQPSK/DQPSK-signaal komt dat neer\
+      \ op het conjugeren van het IQ-signaal (de\nrichting van de fase-rotatie draait\
+      \ om). Met deze knop kun je dat ter\nplekke compenseren/testen zonder de flowgraph\
+      \ te herstarten.\n\"\"\"\n\nimport numpy as np\nfrom gnuradio import gr\nimport\
+      \ pmt\n\n\nclass blk(gr.sync_block):\n\n    def __init__(self):\n        gr.sync_block.__init__(\n\
+      \            self,\n            name='IQ Invert Toggle',\n            in_sig=[np.complex64],\n\
+      \            out_sig=[np.complex64],\n        )\n        self._inverted = False\n\
+      \        self.message_port_register_in(pmt.intern('toggle'))\n        self.set_msg_handler(pmt.intern('toggle'),\
+      \ self._handle_toggle)\n\n    def _handle_toggle(self, msg):\n        self._inverted\
+      \ = not self._inverted\n        state = \"GEINVERTEERD (Q = -Q)\" if self._inverted\
+      \ else \"NORMAAL\"\n        print(f\"[IQ Invert Toggle] nu: {state}\")\n\n \
+      \   def get_inverted(self):\n        return int(self._inverted)\n\n    def work(self,\
+      \ input_items, output_items):\n        in0 = input_items[0]\n        out = output_items[0]\n\
+      \        if self._inverted:\n            out[:] = np.conj(in0)\n        else:\n\
+      \            out[:] = in0\n        return len(out)\n"
+    affinity: ''
+    alias: ''
+    comment: Conjugeert het IQ-signaal (Q = -Q) bij elke druk op de knop. Compenseert
+      boven-/ondermenging-omkering van je externe RF-mixer.
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('IQ Invert Toggle', 'blk', [], [('0', 'complex', 1), ('toggle', 'message',
+      1)], [('0', 'complex', 1)], '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [432, 560.0]
+    rotation: 0
+    state: enabled
+- name: iio_pluto_source_0
+  id: iio_pluto_source
+  parameters:
+    affinity: ''
+    alias: ''
+    bandwidth: '800000'
+    bbdc: 'True'
+    buffer_size: '14000'
+    comment: ''
+    filter: ''
+    filter_source: '''Auto'''
+    fpass: '0'
+    frequency: freq_tune
+    fstop: '0'
+    gain1: '''slow_attack'''
+    len_tag_key: ''
+    manual_gain1: '73'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quadrature: 'True'
+    rfdc: 'True'
+    samplerate: samp_rate
+    type: fc32
+    uri: 192.168.1.62
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [40, 348.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_const_sink_x_0
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'True'
+    axislabels: 'True'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    grid: 'False'
+    gui_hint: 1, 0, 1, 1
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '0'
+    marker10: '0'
+    marker2: '0'
+    marker3: '0'
+    marker4: '0'
+    marker5: '0'
+    marker6: '0'
+    marker7: '0'
+    marker8: '0'
+    marker9: '0'
+    name: qpsk_const
+    nconnections: '1'
+    size: '1024'
+    style1: '0'
+    style10: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '2'
+    xmin: '-2'
+    ymax: '2'
+    ymin: '-2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1320, 520.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_freq_sink_x_0_0
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    axislabels: 'True'
+    bw: '20000000'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    ctrlpanel: 'True'
+    fc: '10000000'
+    fftsize: '2048'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: 1, 1, 1, 1
+    label: Relative Gain
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"RX"'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: complex
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-160'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [800, 328.0]
+    rotation: 0
+    state: enabled
+- name: root_raised_cosine_filter_0_0
+  id: root_raised_cosine_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: BW_tune
+    comment: ''
+    decim: '1'
+    gain: Fil_Gain
+    interp: sps
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    ntaps: '50'
+    samp_rate: samp_rate*4
+    sym_rate: (samp_rate*4)/sps
+    type: fir_filter_ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 528.0]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_msg_push_button_0_0
+  id: variable_qtgui_msg_push_button
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: '"Invert I/Q (mixer boven-/ondermenging)"'
+    msgName: pressed
+    relBackgroundColor: default
+    relFontColor: default
+    type: int
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [200, 672.0]
+    rotation: 0
+    state: enabled
+
+connections:
+- [blocks_unpack_k_bits_bb_0, '0', epy_block_0_1_0, '0']
+- [digital_constellation_decoder_cb_0, '0', blocks_file_sink_0_0_1, '0']
+- [digital_constellation_decoder_cb_0, '0', digital_map_bb_0_0_0_0, '0']
+- [digital_costas_loop_cc_0, '0', digital_constellation_decoder_cb_0, '0']
+- [digital_costas_loop_cc_0, '0', qtgui_const_sink_x_0, '0']
+- [digital_diff_decoder_bb_0, '0', blocks_file_sink_0_0_0_0, '0']
+- [digital_diff_decoder_bb_0, '0', digital_map_bb_0, '0']
+- [digital_map_bb_0, '0', blocks_unpack_k_bits_bb_0, '0']
+- [digital_map_bb_0_0_0_0, '0', digital_diff_decoder_bb_0, '0']
+- [digital_symbol_sync_xx_0, '0', digital_costas_loop_cc_0, '0']
+- [epy_block_iq_invert, '0', root_raised_cosine_filter_0_0, '0']
+- [iio_pluto_source_0, '0', epy_block_iq_invert, '0']
+- [root_raised_cosine_filter_0_0, '0', digital_symbol_sync_xx_0, '0']
+- [root_raised_cosine_filter_0_0, '0', qtgui_freq_sink_x_0_0, '0']
+- [variable_qtgui_msg_push_button_0_0, pressed, epy_block_iq_invert, toggle]
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.12.0
