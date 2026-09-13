@@ -1,0 +1,1361 @@
+options:
+  parameters:
+    author: ''
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: BPSKproject1
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: '1'
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Not titled yet
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 8.0]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: BW_tune
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: '"BW"'
+    min_len: '20'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0.001'
+    step: '0.01'
+    stop: '5'
+    value: '2'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [256, 512.0]
+    rotation: 0
+    state: enabled
+- name: access_code
+  id: variable
+  parameters:
+    comment: ''
+    value: digital.packet_utils.default_access_code
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1304, 48.0]
+    rotation: 0
+    state: enabled
+- name: bpsk_const
+  id: variable_constellation
+  parameters:
+    comment: ''
+    const_points: '[-1, 1]'
+    dims: '1'
+    normalization: digital.constellation.AMPLITUDE_NORMALIZATION
+    npwr: '1.0'
+    precision: '8'
+    rot_sym: '2'
+    soft_dec_lut: None
+    sym_map: '[0, 1]'
+    type: calcdist
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [832, 992.0]
+    rotation: 0
+    state: enabled
+- name: buffer_size
+  id: variable
+  parameters:
+    comment: ''
+    value: '65536'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 184.0]
+    rotation: 0
+    state: enabled
+- name: freq_tune
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: '"Frequentie"'
+    min_len: '20'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: '439450000'
+    step: '100'
+    stop: '439850000'
+    value: '439605500'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 1008.0]
+    rotation: 0
+    state: enabled
+- name: hdr_format
+  id: variable
+  parameters:
+    comment: ''
+    value: digital.header_format_default(access_code, 0)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1632, 48.0]
+    rotation: 0
+    state: enabled
+- name: pkt_len
+  id: variable
+  parameters:
+    comment: "Aantal audiobytes per pakket (payload-grootte, v\xF3\xF3r CRC/header)"
+    value: '256'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [784, 232.0]
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '10000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 112.0]
+    rotation: 0
+    state: enabled
+- name: sps
+  id: variable
+  parameters:
+    comment: ''
+    value: '4'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [784, 336.0]
+    rotation: 0
+    state: enabled
+- name: blocks_char_to_float_0_0
+  id: blocks_char_to_float
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: '1'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1840, 672.0]
+    rotation: 0
+    state: enabled
+- name: blocks_char_to_float_0_0_0
+  id: blocks_char_to_float
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: '1'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1024, 656.0]
+    rotation: 0
+    state: enabled
+- name: blocks_complex_to_real_0
+  id: blocks_complex_to_real
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [832, 704.0]
+    rotation: 0
+    state: enabled
+- name: blocks_repack_bits_bb_0
+  id: blocks_repack_bits_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    align_output: 'True'
+    comment: ''
+    endianness: gr.GR_MSB_FIRST
+    k: '1'
+    l: '8'
+    len_tag_key: packet_len
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1552, 776.0]
+    rotation: 0
+    state: enabled
+- name: blocks_stream_to_tagged_stream_0
+  id: blocks_stream_to_tagged_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    len_tag_key: '"packet_len"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    packet_len: pkt_len
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 160.0]
+    rotation: 0
+    state: enabled
+- name: blocks_tagged_stream_mux_0
+  id: blocks_tagged_stream_mux
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    lengthtagname: packet_len
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    ninputs: '2'
+    tag_preserve_head_pos: '0'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1576, 168.0]
+    rotation: 0
+    state: enabled
+- name: digital_additive_scrambler_xx_0
+  id: digital_additive_scrambler_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    bits_per_byte: '8'
+    comment: ''
+    count: '0'
+    len: '7'
+    mask: '0x8A'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    reset_tag_key: packet_len
+    seed: '0x7F'
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1360, 224.0]
+    rotation: 0
+    state: enabled
+- name: digital_additive_scrambler_xx_0_0
+  id: digital_additive_scrambler_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    bits_per_byte: '8'
+    comment: ''
+    count: '0'
+    len: '7'
+    mask: '0x8A'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    reset_tag_key: packet_len
+    seed: '0x7F'
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1728, 744.0]
+    rotation: 0
+    state: enabled
+- name: digital_binary_slicer_fb_0
+  id: digital_binary_slicer_fb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [856, 792.0]
+    rotation: 0
+    state: enabled
+- name: digital_constellation_modulator_0
+  id: digital_constellation_modulator
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: bpsk_const
+    differential: 'False'
+    excess_bw: BW_tune
+    log: 'False'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_symbol: sps
+    truncate: 'False'
+    verbose: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1800, 152.0]
+    rotation: 0
+    state: enabled
+- name: digital_correlate_access_code_xx_ts_0
+  id: digital_correlate_access_code_xx_ts
+  parameters:
+    access_code: access_code
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tagname: packet_len
+    threshold: '3'
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1016, 768.0]
+    rotation: 0
+    state: enabled
+- name: digital_costas_loop_cc_0
+  id: digital_costas_loop_cc
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: buffer_size
+    order: '2'
+    use_snr: 'False'
+    w: '0.5'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [600, 816.0]
+    rotation: 0
+    state: enabled
+- name: digital_crc32_bb_0
+  id: digital_crc32_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    check: 'False'
+    comment: ''
+    lengthtagname: packet_len
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    packed: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1088, 160.0]
+    rotation: 0
+    state: enabled
+- name: digital_crc32_bb_1
+  id: digital_crc32_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    check: 'True'
+    comment: ''
+    lengthtagname: packet_len
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    packed: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1912, 768.0]
+    rotation: 0
+    state: enabled
+- name: digital_protocol_formatter_bb_0
+  id: digital_protocol_formatter_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    format: hdr_format
+    len_tag_key: packet_len
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1304, 152.0]
+    rotation: 0
+    state: enabled
+- name: digital_symbol_sync_xx_0
+  id: digital_symbol_sync_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: digital.constellation_bpsk().base()
+    damping: '1.414'
+    loop_bw: '0.15'
+    max_dev: '1.5'
+    maxoutbuf: '0'
+    minoutbuf: buffer_size
+    nfilters: '128'
+    osps: '1'
+    pfb_mf_taps: '[]'
+    resamp_type: digital.IR_MMSE_8TAP
+    sps: sps
+    ted_gain: '0.5'
+    ted_type: digital.TED_GARDNER
+    type: cc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [304, 832.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_0
+  id: epy_block
+  parameters:
+    _source_code: "import numpy as np\nfrom gnuradio import gr\nimport pmt\nfrom collections\
+      \ import deque\n\nclass blk(gr.sync_block):\n    \"\"\"UDP-PDU's naar een ononderbroken\
+      \ bytestroom, met filler zodra\n    de buffer leeg is. Buffergrootte is nu gekoppeld\
+      \ aan een maximale\n    vertraging in plaats van een vast aantal bytes.\"\"\"\
+      \n\n    def __init__(self, filler_byte=0, max_latency_sec=2.0, channel_bytes_per_sec=150):\n\
+      \        gr.sync_block.__init__(\n            self,\n            name='PDU naar\
+      \ continue stream (met filler, beperkte latency)',\n            in_sig=None,\n\
+      \            out_sig=[np.uint8]\n        )\n        self.filler_byte = int(filler_byte)\
+      \ & 0xFF\n        # Buffergrootte = max_latency_sec * kanaalcapaciteit.\n  \
+      \      # Zodra dit vol is, vallen de OUDSTE bytes vanzelf weg (deque-gedrag),\n\
+      \        # zodat de vertraging nooit verder oploopt dan max_latency_sec.\n \
+      \       max_bytes = max(1, int(max_latency_sec * channel_bytes_per_sec))\n \
+      \       self.buf = deque(maxlen=max_bytes)\n        self.message_port_register_in(pmt.intern('pdus'))\n\
+      \        self.set_msg_handler(pmt.intern('pdus'), self.handle_pdu)\n\n    def\
+      \ handle_pdu(self, msg):\n        data = pmt.cdr(msg)\n        if pmt.is_u8vector(data):\n\
+      \            self.buf.extend(pmt.u8vector_elements(data))\n\n    def work(self,\
+      \ input_items, output_items):\n        out = output_items[0]\n        for i\
+      \ in range(len(out)):\n            out[i] = self.buf.popleft() if self.buf else\
+      \ self.filler_byte\n        return len(out)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
+      \n\n# import numpy as np\n# from gnuradio import gr\n# import pmt\n# from collections\
+      \ import deque\n\n# class blk(gr.sync_block):\n    # \"\"\"UDP-PDU's naar een\
+      \ ononderbroken bytestroom, met filler zodra de buffer leeg is\"\"\"\n\n   \
+      \ # def __init__(self, filler_byte=0):\n        # gr.sync_block.__init__(\n\
+      \            # self,\n            # name='PDU naar continue stream (met filler)',\n\
+      \            # in_sig=None,\n            # out_sig=[np.uint8]\n        # )\n\
+      \        # self.filler_byte = int(filler_byte) & 0xFF\n        # # maxlen voorkomt\
+      \ dat de buffer eindeloos opzwelt als UDP sneller\n        # # binnenkomt dan\
+      \ er wordt uitgezonden; oudste bytes vallen dan vanzelf af\n        # self.buf\
+      \ = deque(maxlen=1_000_000)\n        # self.message_port_register_in(pmt.intern('pdus'))\n\
+      \        # self.set_msg_handler(pmt.intern('pdus'), self.handle_pdu)\n\n   \
+      \ # def handle_pdu(self, msg):\n        # data = pmt.cdr(msg)\n        # if\
+      \ pmt.is_u8vector(data):\n            # self.buf.extend(pmt.u8vector_elements(data))\n\
+      \n    # def work(self, input_items, output_items):\n        # out = output_items[0]\n\
+      \        # for i in range(len(out)):\n            # out[i] = self.buf.popleft()\
+      \ if self.buf else self.filler_byte\n        # return len(out)\n        \n \
+      \       "
+    affinity: ''
+    alias: ''
+    channel_bytes_per_sec: '15000'
+    comment: ''
+    filler_byte: '85'
+    max_latency_sec: '2'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('PDU naar continue stream (met filler, beperkte latency)', 'blk',
+      [('filler_byte', '0'), ('max_latency_sec', '2.0'), ('channel_bytes_per_sec',
+      '150')], [('pdus', 'message', 1)], [('0', 'byte', 1)], "UDP-PDU's naar een ononderbroken
+      bytestroom, met filler zodra\n    de buffer leeg is. Buffergrootte is nu gekoppeld
+      aan een maximale\n    vertraging in plaats van een vast aantal bytes.", ['filler_byte'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [384, 192.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_1
+  id: epy_block
+  parameters:
+    _source_code: "import numpy as np\nfrom gnuradio import gr\nimport pmt\n\n\nclass\
+      \ blk(gr.sync_block):\n    \"\"\"Corrigeert ongeldige packet_len-tags EN injecteert\
+      \ zelf een\n    synthetische tag als er te lang geen geldige detectie binnenkomt,\n\
+      \    zodat repack_bits_bb nooit zonder tag komt te zitten.\"\"\"\n\n    def\
+      \ __init__(self, tag_name='packet_len', max_len=3000, safe_len=2080):\n    \
+      \    gr.sync_block.__init__(\n            self,\n            name='Packet-len\
+      \ tag validator',\n            in_sig=[np.uint8],\n            out_sig=[np.uint8]\n\
+      \        )\n        self.tag_name = tag_name\n        self.max_len = int(max_len)\n\
+      \        self.safe_len = int(safe_len)\n        self.set_tag_propagation_policy(gr.TPP_DONT)\n\
+      \        self.next_expected_offset = None  # absolute stream-offset\n\n    def\
+      \ work(self, input_items, output_items):\n        in0 = input_items[0]\n   \
+      \     out = output_items[0]\n        n = len(in0)\n        out[:] = in0\n\n\
+      \        start_offset = self.nitems_read(0)\n        end_offset = start_offset\
+      \ + n\n\n        tags = self.get_tags_in_window(0, 0, n)\n        real_tags\
+      \ = []\n        for tag in tags:\n            key = pmt.symbol_to_string(tag.key)\n\
+      \            if key != self.tag_name:\n                continue\n          \
+      \  real_tags.append(tag)\n\n        # Eerste keer: begin gewoon te tellen vanaf\
+      \ nu.\n        if self.next_expected_offset is None:\n            self.next_expected_offset\
+      \ = start_offset\n\n        pos = start_offset\n        for tag in sorted(real_tags,\
+      \ key=lambda t: t.offset):\n            # Gat vullen: als er tussen 'pos' en\
+      \ deze tag een te grote\n            # afstand zit zonder enige tag, synthetische\
+      \ tags inschuiven.\n            while self.next_expected_offset < tag.offset:\n\
+      \                self.add_item_tag(\n                    0, self.next_expected_offset,\n\
+      \                    pmt.intern(self.tag_name),\n                    pmt.from_long(self.safe_len)\n\
+      \                )\n                self.next_expected_offset += self.safe_len\n\
+      \n            value = pmt.to_long(tag.value)\n            if value <= 0 or value\
+      \ > self.max_len:\n                corrected = self.safe_len\n            else:\n\
+      \                corrected = value\n\n            self.add_item_tag(0, tag.offset,\
+      \ tag.key, pmt.from_long(corrected))\n            self.next_expected_offset\
+      \ = tag.offset + corrected\n\n        # Ook binnen dit werkblok vooruitkijken:\
+      \ als er geen enkele tag\n        # was, maar we toch de verwachte grens overschrijden,\
+      \ alvast vullen.\n        while self.next_expected_offset < end_offset:\n  \
+      \          self.add_item_tag(\n                0, self.next_expected_offset,\n\
+      \                pmt.intern(self.tag_name),\n                pmt.from_long(self.safe_len)\n\
+      \            )\n            self.next_expected_offset += self.safe_len\n\n \
+      \       return n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    max_len: '3000'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    safe_len: '2080'
+    tag_name: '"packet_len"'
+  states:
+    _io_cache: ('Packet-len tag validator', 'blk', [('tag_name', "'packet_len'"),
+      ('max_len', '3000'), ('safe_len', '2080')], [('0', 'byte', 1)], [('0', 'byte',
+      1)], 'Corrigeert ongeldige packet_len-tags EN injecteert zelf een\n    synthetische
+      tag als er te lang geen geldige detectie binnenkomt,\n    zodat repack_bits_bb
+      nooit zonder tag komt te zitten.', ['max_len', 'safe_len', 'tag_name'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1296, 768.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_2
+  id: epy_block
+  parameters:
+    _source_code: "import subprocess\nfrom gnuradio import gr\nimport pmt\n\n\nclass\
+      \ blk(gr.sync_block):\n    \"\"\"Start ffplay als los proces zodra er een bericht\
+      \ binnenkomt\n    via de QT GUI Message Button.\"\"\"\n\n    def __init__(self,\
+      \ udp_port=12345):\n        gr.sync_block.__init__(\n            self,\n   \
+      \         name='Start ffplay button handler',\n            in_sig=None,\n  \
+      \          out_sig=None\n        )\n        self.udp_port = int(udp_port)\n\
+      \        self.process = None\n        self.message_port_register_in(pmt.intern('start'))\n\
+      \        self.set_msg_handler(pmt.intern('start'), self.handle_msg)\n\n    def\
+      \ handle_msg(self, msg):\n        if self.process is not None and self.process.poll()\
+      \ is None:\n            print(\"[ffplay] draait al, negeer nieuwe klik.\")\n\
+      \            return\n\n        ffplay_cmd = (\n            f'ffplay -loglevel\
+      \ error -fflags +discardcorrupt+genpts+nobuffer '\n            f'-err_detect\
+      \ ignore_err -max_delay 500000 '\n            f'-f mpegts -i udp://127.0.0.1:{self.udp_port}'\n\
+      \        )\n\n        full_cmd = (\n            f'echo Start ffplay op poort\
+      \ {self.udp_port}... & '\n            f'echo Commando: {ffplay_cmd} & '\n  \
+      \          f'echo. & '\n            f'{ffplay_cmd} & '\n            f'echo.\
+      \ & '\n            f'echo ffplay is gestopt (druk op een toets om dit venster\
+      \ te sluiten) & '\n            f'pause >nul'\n        )\n\n        print(f\"\
+      [ffplay] Start: {ffplay_cmd}\")\n        self.process = subprocess.Popen(\n\
+      \            [\"cmd\", \"/c\", full_cmd],\n            creationflags=subprocess.CREATE_NEW_CONSOLE\n\
+      \        )\n\n    def stop(self):\n        if self.process is not None and self.process.poll()\
+      \ is None:\n            self.process.terminate()\n        return True"
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    udp_port: '12345'
+  states:
+    _io_cache: ('Start ffplay button handler', 'blk', [('udp_port', '12345')], [('start',
+      'message', 1)], [], 'Start ffplay als los proces zodra er een bericht binnenkomt\n    via
+      de QT GUI Message Button.', ['udp_port'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1600, 984.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_3
+  id: epy_block
+  parameters:
+    _source_code: "import os\nimport tempfile\nimport subprocess\nfrom gnuradio import\
+      \ gr\nimport pmt\n\n\nclass blk(gr.sync_block):\n    \"\"\"Start ffmpeg als\
+      \ los proces zodra er een bericht binnenkomt\n    via de QT GUI Message Button.\"\
+      \"\"\n\n    def __init__(self, audio_device='CABLE-C Output (VB-Audio Cable\
+      \ C)',\n                 udp_port=1234):\n        gr.sync_block.__init__(\n\
+      \            self,\n            name='Start ffmpeg button handler',\n      \
+      \      in_sig=None,\n            out_sig=None\n        )\n        self.audio_device\
+      \ = str(audio_device)\n        self.udp_port = int(udp_port)\n        self.process\
+      \ = None\n        self.message_port_register_in(pmt.intern('start'))\n     \
+      \   self.set_msg_handler(pmt.intern('start'), self.handle_msg)\n\n    def handle_msg(self,\
+      \ msg):\n        if self.process is not None and self.process.poll() is None:\n\
+      \            print(\"[ffmpeg] draait al, negeer nieuwe klik.\")\n          \
+      \  return\n\n        ffmpeg_cmd = (\n            f'ffmpeg -f dshow -i audio=\"\
+      {self.audio_device}\" '\n            f'-c:a aac -b:a 128k -ac 2 -ar 48000 -muxrate\
+      \ 200k '\n            f'-f mpegts udp://127.0.0.1:{self.udp_port}'\n       \
+      \ )\n\n        # Schrijf het commando naar een tijdelijk .bat-bestand om\n \
+      \       # problemen met haakjes/aanhalingstekens in cmd te vermijden.\n    \
+      \    bat_path = os.path.join(tempfile.gettempdir(), \"start_ffmpeg_audio.bat\"\
+      )\n        with open(bat_path, \"w\") as f:\n            f.write(\"@echo off\\\
+      r\\n\")\n            f.write(\"echo Start ffmpeg audio-encoder...\\r\\n\")\n\
+      \            f.write(f\"echo Apparaat: {self.audio_device}\\r\\n\")\n      \
+      \      f.write(f\"echo Commando: {ffmpeg_cmd}\\r\\n\")\n            f.write(\"\
+      echo.\\r\\n\")\n            f.write(f\"{ffmpeg_cmd}\\r\\n\")\n            f.write(\"\
+      echo.\\r\\n\")\n            f.write(\"echo ffmpeg is gestopt (druk op een toets\
+      \ om dit venster te sluiten)\\r\\n\")\n            f.write(\"pause >nul\\r\\\
+      n\")\n\n        print(f\"[ffmpeg] Start via: {bat_path}\")\n        self.process\
+      \ = subprocess.Popen(\n            [\"cmd\", \"/c\", bat_path],\n          \
+      \  creationflags=subprocess.CREATE_NEW_CONSOLE\n        )\n\n    def stop(self):\n\
+      \        if self.process is not None and self.process.poll() is None:\n    \
+      \        self.process.terminate()\n        return True"
+    affinity: ''
+    alias: ''
+    audio_device: '"CABLE-C Output (VB-Audio Cable C)"'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    udp_port: '1234'
+  states:
+    _io_cache: ('Start ffmpeg button handler', 'blk', [('audio_device', "'CABLE-C
+      Output (VB-Audio Cable C)'"), ('udp_port', '1234')], [('start', 'message', 1)],
+      [], 'Start ffmpeg als los proces zodra er een bericht binnenkomt\n    via de
+      QT GUI Message Button.', ['audio_device', 'udp_port'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [408, 296.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_timestamp_end
+  id: epy_block
+  parameters:
+    _source_code: "import numpy as np\nfrom gnuradio import gr\nimport pmt\nimport\
+      \ time\n\nclass blk(gr.sync_block):\n    \"\"\"Print een tijdstempel telkens\
+      \ als er een packet_len-tag voorbijkomt.\"\"\"\n\n    def __init__(self, label='END',\
+      \ tag_name='packet_len'):\n        gr.sync_block.__init__(\n            self,\n\
+      \            name='Packet Timestamp Logger',\n            in_sig=[np.uint8],\n\
+      \            out_sig=[np.uint8]\n        )\n        self.label = label\n   \
+      \     self.tag_name = tag_name\n\n    def work(self, input_items, output_items):\n\
+      \        in0 = input_items[0]\n        out = output_items[0]\n        out[:]\
+      \ = in0\n        n = len(in0)\n        tags = self.get_tags_in_window(0, 0,\
+      \ n)\n        for tag in tags:\n            key = pmt.symbol_to_string(tag.key)\n\
+      \            if key == self.tag_name:\n                print(f\"[{self.label}]\
+      \ {time.time():.3f}  offset={tag.offset}\")\n        return n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: '"END (na Stream CRC32 check)"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag_name: '"packet_len"'
+  states:
+    _io_cache: ('Packet Timestamp Logger', 'blk', [('label', "'END'"), ('tag_name',
+      "'packet_len'")], [('0', 'byte', 1)], [('0', 'byte', 1)], 'Print een tijdstempel
+      telkens als er een packet_len-tag voorbijkomt.', ['label', 'tag_name'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1968, 976.0]
+    rotation: 0
+    state: bypassed
+- name: epy_block_timestamp_start
+  id: epy_block
+  parameters:
+    _source_code: "import numpy as np\nfrom gnuradio import gr\nimport pmt\nimport\
+      \ time\n\nclass blk(gr.sync_block):\n    \"\"\"Print een tijdstempel telkens\
+      \ als er een packet_len-tag voorbijkomt.\"\"\"\n\n    def __init__(self, label='START',\
+      \ tag_name='packet_len'):\n        gr.sync_block.__init__(\n            self,\n\
+      \            name='Packet Timestamp Logger',\n            in_sig=[np.uint8],\n\
+      \            out_sig=[np.uint8]\n        )\n        self.label = label\n   \
+      \     self.tag_name = tag_name\n\n    def work(self, input_items, output_items):\n\
+      \        in0 = input_items[0]\n        out = output_items[0]\n        out[:]\
+      \ = in0\n        n = len(in0)\n        tags = self.get_tags_in_window(0, 0,\
+      \ n)\n        for tag in tags:\n            key = pmt.symbol_to_string(tag.key)\n\
+      \            if key == self.tag_name:\n                print(f\"[{self.label}]\
+      \ {time.time():.3f}  offset={tag.offset}\")\n        return n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: '"START (na Correlate Access Code)"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag_name: '"packet_len"'
+  states:
+    _io_cache: ('Packet Timestamp Logger', 'blk', [('label', "'START'"), ('tag_name',
+      "'packet_len'")], [('0', 'byte', 1)], [('0', 'byte', 1)], 'Print een tijdstempel
+      telkens als er een packet_len-tag voorbijkomt.', ['label', 'tag_name'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [816, 40.0]
+    rotation: 0
+    state: bypassed
+- name: iio_pluto_sink_0_0_0
+  id: iio_pluto_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    attenuation1: '8'
+    bandwidth: '300000'
+    buffer_size: '149660'
+    comment: ''
+    cyclic: 'False'
+    filter: ''
+    filter_source: '''Auto'''
+    fpass: '0'
+    frequency: '439600000'
+    fstop: '0'
+    len_tag_key: ''
+    samplerate: '1200000'
+    type: fc32
+    uri: 192.168.1.61
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2112, 256.0]
+    rotation: 0
+    state: enabled
+- name: iio_pluto_source_0
+  id: iio_pluto_source
+  parameters:
+    affinity: ''
+    alias: ''
+    bandwidth: '300000'
+    bbdc: 'True'
+    buffer_size: '14966'
+    comment: ''
+    filter: ''
+    filter_source: '''Auto'''
+    fpass: '0'
+    frequency: freq_tune
+    fstop: '0'
+    gain1: '''slow_attack'''
+    len_tag_key: ''
+    manual_gain1: '73'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quadrature: 'False'
+    rfdc: 'True'
+    samplerate: '1200000'
+    type: fc32
+    uri: 192.168.1.62
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 812.0]
+    rotation: 0
+    state: enabled
+- name: network_socket_pdu_0
+  id: network_socket_pdu
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    host: 127.0.0.1
+    maxoutbuf: '0'
+    minoutbuf: buffer_size
+    mtu: '10000'
+    port: '1234'
+    tcp_no_delay: 'False'
+    type: UDP_SERVER
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [216, 144.0]
+    rotation: 0
+    state: enabled
+- name: network_udp_sink_0_0
+  id: network_udp_sink
+  parameters:
+    addr: 127.0.0.1
+    affinity: ''
+    alias: ''
+    comment: ''
+    header: '0'
+    payloadsize: '100'
+    port: '12345'
+    send_eof: 'False'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2320, 808.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_const_sink_x_0
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'True'
+    axislabels: 'True'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    grid: 'False'
+    gui_hint: 1, 0, 1, 1
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '0'
+    marker10: '0'
+    marker2: '0'
+    marker3: '0'
+    marker4: '0'
+    marker5: '0'
+    marker6: '0'
+    marker7: '0'
+    marker8: '0'
+    marker9: '0'
+    name: '"CONSTELLATION BPSK"'
+    nconnections: '1'
+    size: '1024'
+    style1: '0'
+    style10: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '2'
+    xmin: '-2'
+    ymax: '2'
+    ymin: '-2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [832, 912.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_freq_sink_x_0_0
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    axislabels: 'True'
+    bw: '1000000'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    ctrlpanel: 'True'
+    fc: '0'
+    fftsize: '2048'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: 1, 1, 1, 1
+    label: Relative Gain
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"RX"'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: complex
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-160'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [440, 656.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_time_sink_x_0_0
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'False'
+    gui_hint: ' 0, 1, 1, 1'
+    label1: Signal 1
+    label10: Signal 10
+    label2: Signal 2
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '"Gedecodeerde ontvangst"'
+    nconnections: '1'
+    size: '1024'
+    srate: samp_rate*10
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: float
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: S2
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1984, 648.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_time_sink_x_0_0_0
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'False'
+    gui_hint: 0, 0, 1, 1
+    label1: S1
+    label10: Signal 10
+    label2: Signal 2
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '"Raw Ontvangst Packet"'
+    nconnections: '1'
+    size: '1024'
+    srate: samp_rate*10
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: float
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: S1
+    ymax: '0.1'
+    ymin: '0'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1184, 632.0]
+    rotation: 0
+    state: enabled
+- name: root_raised_cosine_filter_0
+  id: root_raised_cosine_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: BW_tune
+    comment: ''
+    decim: '1'
+    gain: '4'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: buffer_size
+    ntaps: '20'
+    samp_rate: samp_rate
+    sym_rate: samp_rate/sps
+    type: fir_filter_ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 640.0]
+    rotation: 0
+    state: enabled
+- name: root_raised_cosine_filter_0_0
+  id: root_raised_cosine_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: BW_tune
+    comment: ''
+    decim: '1'
+    gain: '0.6'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    ntaps: '20'
+    samp_rate: samp_rate
+    sym_rate: samp_rate/sps
+    type: fir_filter_ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1864, 272.0]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_msg_push_button_0
+  id: variable_qtgui_msg_push_button
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: Start ffplay
+    msgName: pressed
+    relBackgroundColor: default
+    relFontColor: default
+    type: int
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1296, 960.0]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_msg_push_button_1
+  id: variable_qtgui_msg_push_button
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: Start ffmpeg (audio-encoder)
+    msgName: pressed
+    relBackgroundColor: default
+    relFontColor: default
+    type: int
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [128, 328.0]
+    rotation: 0
+    state: enabled
+- name: virtual_sink_0
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: tx_out
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2080, 64.0]
+    rotation: 0
+    state: disabled
+- name: virtual_source_0
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: tx_out
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 608.0]
+    rotation: 0
+    state: disabled
+
+connections:
+- [blocks_char_to_float_0_0, '0', qtgui_time_sink_x_0_0, '0']
+- [blocks_char_to_float_0_0_0, '0', qtgui_time_sink_x_0_0_0, '0']
+- [blocks_complex_to_real_0, '0', digital_binary_slicer_fb_0, '0']
+- [blocks_repack_bits_bb_0, '0', digital_additive_scrambler_xx_0_0, '0']
+- [blocks_stream_to_tagged_stream_0, '0', epy_block_timestamp_start, '0']
+- [blocks_tagged_stream_mux_0, '0', digital_constellation_modulator_0, '0']
+- [digital_additive_scrambler_xx_0, '0', blocks_tagged_stream_mux_0, '1']
+- [digital_additive_scrambler_xx_0_0, '0', digital_crc32_bb_1, '0']
+- [digital_binary_slicer_fb_0, '0', blocks_char_to_float_0_0_0, '0']
+- [digital_binary_slicer_fb_0, '0', digital_correlate_access_code_xx_ts_0, '0']
+- [digital_constellation_modulator_0, '0', root_raised_cosine_filter_0_0, '0']
+- [digital_constellation_modulator_0, '0', virtual_sink_0, '0']
+- [digital_correlate_access_code_xx_ts_0, '0', epy_block_1, '0']
+- [digital_costas_loop_cc_0, '0', blocks_complex_to_real_0, '0']
+- [digital_costas_loop_cc_0, '0', qtgui_const_sink_x_0, '0']
+- [digital_crc32_bb_0, '0', digital_additive_scrambler_xx_0, '0']
+- [digital_crc32_bb_0, '0', digital_protocol_formatter_bb_0, '0']
+- [digital_crc32_bb_1, '0', blocks_char_to_float_0_0, '0']
+- [digital_crc32_bb_1, '0', epy_block_timestamp_end, '0']
+- [digital_protocol_formatter_bb_0, '0', blocks_tagged_stream_mux_0, '0']
+- [digital_symbol_sync_xx_0, '0', digital_costas_loop_cc_0, '0']
+- [epy_block_0, '0', blocks_stream_to_tagged_stream_0, '0']
+- [epy_block_1, '0', blocks_repack_bits_bb_0, '0']
+- [epy_block_timestamp_end, '0', network_udp_sink_0_0, '0']
+- [epy_block_timestamp_start, '0', digital_crc32_bb_0, '0']
+- [iio_pluto_source_0, '0', root_raised_cosine_filter_0, '0']
+- [network_socket_pdu_0, pdus, epy_block_0, pdus]
+- [root_raised_cosine_filter_0, '0', digital_symbol_sync_xx_0, '0']
+- [root_raised_cosine_filter_0, '0', qtgui_freq_sink_x_0_0, '0']
+- [root_raised_cosine_filter_0_0, '0', iio_pluto_sink_0_0_0, '0']
+- [variable_qtgui_msg_push_button_0, pressed, epy_block_2, start]
+- [variable_qtgui_msg_push_button_1, pressed, epy_block_3, start]
+- [virtual_source_0, '0', root_raised_cosine_filter_0, '0']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.12.0
